@@ -121,6 +121,13 @@
       margin-top: 2rem;
       padding-bottom: 2rem;
     }
+    .search-box {
+      margin-top: 1rem;
+      display: flex; justify-content: center;
+    }
+    .search-box input {
+      max-width: 300px;
+    }
   </style>
 </head>
 <body>
@@ -153,6 +160,11 @@
         </label>
         <input id="price-fib" type="number" value="0">
       </div>
+    </div>
+
+    <!-- Search Stockist -->
+    <div class="search-box">
+      <input id="filter-stockist" type="search" placeholder="🔍 Search Stockists…">
     </div>
 
     <!-- Sales Table -->
@@ -195,7 +207,7 @@
   <script>
     const $ = id => document.getElementById(id);
     const priceResD = $('price-resd'), priceOpti = $('price-opti'), priceFib = $('price-fib'),
-          body = $('body-sales'), btnAdd = $('btn-add'),
+          body = $('body-sales'), filter = $('filter-stockist'), btnAdd = $('btn-add'),
           sums = {
             rdU: $('sum-resd-u'), rdV: $('sum-resd-v'),
             oU: $('sum-opti-u'), oV: $('sum-opti-v'),
@@ -208,6 +220,14 @@
 
     btnAdd.onclick = () => { addRow(); save(); calc(); };
     [priceResD, priceOpti, priceFib].forEach(inp => inp.oninput = () => { save(); calc(); });
+
+    filter.oninput = e => {
+      const f = e.target.value.toLowerCase();
+      [...body.rows].forEach(tr => {
+        const name = tr.cells[0].firstChild.value.toLowerCase();
+        tr.style.display = name.includes(f) ? '' : 'none';
+      });
+    };
 
     function addRow(d = {name:'', rd:0, o:0, f:0}) {
       const tr = document.createElement('tr');
@@ -222,6 +242,7 @@
         <td class="cell-grand">0.00</td>
         <td><button class="btn btn-del">🗑</button></td>`;
       body.appendChild(tr);
+
       tr.querySelectorAll('input').forEach(i => i.oninput = () => { save(); calc(); });
       tr.querySelector('.btn-del').onclick = () => { tr.remove(); save(); calc(); };
     }
@@ -231,8 +252,8 @@
           pRD=+priceResD.value, pO=+priceOpti.value, pF=+priceFib.value;
       [...body.rows].forEach(tr => {
         const qRD=+tr.querySelector('.qty-rd').value||0,
-              qO=+tr.querySelector('.qty-o').value||0,
-              qF=+tr.querySelector('.qty-f').value||0,
+              qO =+tr.querySelector('.qty-o').value||0,
+              qF =+tr.querySelector('.qty-f').value||0,
               vRD=qRD*pRD, vO=qO*pO, vF=qF*pF, rowTotal=vRD+vO+vF;
         tr.querySelector('.cell-rd-v').textContent = vRD.toFixed(2);
         tr.querySelector('.cell-o-v').textContent = vO.toFixed(2);
