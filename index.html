@@ -61,6 +61,13 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(24,90,219,0.25);
     }
+    .search-box {
+      margin-top: 1rem;
+      display: flex; justify-content: center;
+    }
+    .search-box input {
+      max-width: 300px;
+    }
     table {
       width: 100%;
       border-collapse: separate;
@@ -121,13 +128,6 @@
       margin-top: 2rem;
       padding-bottom: 2rem;
     }
-    .search-box {
-      margin-top: 1rem;
-      display: flex; justify-content: center;
-    }
-    .search-box input {
-      max-width: 300px;
-    }
   </style>
 </head>
 <body>
@@ -137,25 +137,25 @@
   </header>
 
   <main class="card">
-    <!-- Price Inputs with Logos -->
+    <!-- Price Inputs with Inline Logos -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div>
         <label>
-          <img src="data:image/jpeg;base64,/***Base64 of attachment 3***/" alt="Resource Diabetic">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." alt="Resource Diabetic">
           Resource Diabetic ₹
         </label>
         <input id="price-resd" type="number" value="0">
       </div>
       <div>
         <label>
-          <img src="data:image/jpeg;base64,/***Base64 of attachment 1***/" alt="Optifast">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." alt="Optifast">
           Optifast ₹
         </label>
         <input id="price-opti" type="number" value="118752">
       </div>
       <div>
         <label>
-          <img src="data:image/jpeg;base64,/***Base64 of attachment 2***/" alt="Fiber Choice">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." alt="Fiber Choice">
           Fiber Choice ₹
         </label>
         <input id="price-fib" type="number" value="0">
@@ -206,12 +206,19 @@
 
   <script>
     const $ = id => document.getElementById(id);
-    const priceResD = $('price-resd'), priceOpti = $('price-opti'), priceFib = $('price-fib'),
-          body = $('body-sales'), filter = $('filter-stockist'), btnAdd = $('btn-add'),
-          sums = {
-            rdU: $('sum-resd-u'), rdV: $('sum-resd-v'),
-            oU: $('sum-opti-u'), oV: $('sum-opti-v'),
-            fU: $('sum-fib-u'), fV: $('sum-fib-v'),
+    const priceResD = $('price-resd'),
+          priceOpti = $('price-opti'),
+          priceFib   = $('price-fib'),
+          body       = $('body-sales'),
+          filter     = $('filter-stockist'),
+          btnAdd     = $('btn-add'),
+          sums       = {
+            rdU: $('sum-resd-u'),
+            rdV: $('sum-resd-v'),
+            oU: $('sum-opti-u'),
+            oV: $('sum-opti-v'),
+            fU: $('sum-fib-u'),
+            fV: $('sum-fib-v'),
             grand: $('sum-grand')
           };
     const STORAGE = 'sales-tracker-2025';
@@ -219,8 +226,7 @@
     state.rows.forEach(addRow); calc();
 
     btnAdd.onclick = () => { addRow(); save(); calc(); };
-    [priceResD, priceOpti, priceFib].forEach(inp => inp.oninput = () => { save(); calc(); });
-
+    [priceResD, priceOpti, priceFib].forEach(i => i.oninput = () => { save(); calc(); });
     filter.oninput = e => {
       const f = e.target.value.toLowerCase();
       [...body.rows].forEach(tr => {
@@ -242,7 +248,6 @@
         <td class="cell-grand">0.00</td>
         <td><button class="btn btn-del">🗑</button></td>`;
       body.appendChild(tr);
-
       tr.querySelectorAll('input').forEach(i => i.oninput = () => { save(); calc(); });
       tr.querySelector('.btn-del').onclick = () => { tr.remove(); save(); calc(); };
     }
@@ -251,28 +256,30 @@
       let rdU=0, oU=0, fU=0, rdV=0, oV=0, fV=0, g=0,
           pRD=+priceResD.value, pO=+priceOpti.value, pF=+priceFib.value;
       [...body.rows].forEach(tr => {
-        const qRD=+tr.querySelector('.qty-rd').value||0,
-              qO =+tr.querySelector('.qty-o').value||0,
-              qF =+tr.querySelector('.qty-f').value||0,
-              vRD=qRD*pRD, vO=qO*pO, vF=qF*pF, rowTotal=vRD+vO+vF;
+        const qRD = +tr.querySelector('.qty-rd').value||0,
+              qO  = +tr.querySelector('.qty-o').value||0,
+              qF  = +tr.querySelector('.qty-f').value||0,
+              vRD = qRD*pRD, vO = qO*pO, vF = qF*pF,
+              rowTotal = vRD+vO+vF;
         tr.querySelector('.cell-rd-v').textContent = vRD.toFixed(2);
         tr.querySelector('.cell-o-v').textContent = vO.toFixed(2);
         tr.querySelector('.cell-f-v').textContent = vF.toFixed(2);
         tr.querySelector('.cell-grand').textContent = rowTotal.toFixed(2);
-        rdU+=qRD; oU+=qO; fU+=qF; rdV+=vRD; oV+=vO; fV+=vF; g+=rowTotal;
+        rdU+=qRD; oU+=qO; fU+=qF;
+        rdV+=vRD; oV+=vO; fV+=vF; g+=rowTotal;
       });
-      sums.rdU.textContent = rdU; sums.rdV.textContent = rdV.toFixed(2);
-      sums.oU.textContent = oU; sums.oV.textContent = oV.toFixed(2);
-      sums.fU.textContent = fU; sums.fV.textContent = fV.toFixed(2);
+      sums.rdU.textContent = rdU;           sums.rdV.textContent = rdV.toFixed(2);
+      sums.oU.textContent  = oU;            sums.oV.textContent  = oV.toFixed(2);
+      sums.fU.textContent  = fU;            sums.fV.textContent  = fV.toFixed(2);
       sums.grand.textContent = g.toFixed(2);
     }
 
     function save() {
       const rows = [...body.rows].map(tr => ({
         name: tr.cells[0].firstChild.value,
-        rd: tr.querySelector('.qty-rd').value,
-        o: tr.querySelector('.qty-o').value,
-        f: tr.querySelector('.qty-f').value
+        rd:   tr.querySelector('.qty-rd').value,
+        o:    tr.querySelector('.qty-o').value,
+        f:    tr.querySelector('.qty-f').value
       }));
       localStorage.setItem(STORAGE, JSON.stringify({rows}));
     }
