@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sales Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#f3f4f6; font-family:Inter,sans-serif }
+    header { background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.1) }
+    .btn-add {
+      background-color: #4f46e5; /* bg-indigo-600 */
+      color: #fff; /* text-white */
+      border-radius: 0.375rem; /* rounded */
+      padding-left: 1rem; /* px-4 */
+      padding-right: 1rem;
+      padding-top: 0.5rem; /* py-2 */
+      padding-bottom: 0.5rem;
+      display: flex; /* flex */
+      align-items: center; /* items-center */
+      gap: 0.5rem; /* gap-2 */
+      transition: background 0.2s;
+    }
+    .btn-add:hover {
+      background-color: #4338ca; /* hover:bg-indigo-700 */
+    }
+    .btn-del {
+      color: #ef4444; /* text-red-500 */
+      transition: color 0.2s;
+    }
+    .btn-del:hover {
+      color: #b91c1c; /* hover:text-red-700 */
+    }
+    table th {
+      background-color: #eef2ff; /* bg-indigo-50 */
+      color: #4338ca; /* text-indigo-700 */
+      font-weight: 500; /* font-medium */
+      text-transform: uppercase; /* uppercase */
+      font-size: 0.75rem; /* text-xs */
+      padding-left: 1rem; /* px-4 */
+      padding-right: 1rem;
+      padding-top: 0.75rem; /* py-3 */
+      padding-bottom: 0.75rem;
+    }
+    table td {
+      padding-left: 1rem; /* px-4 */
+      padding-right: 1rem;
+      padding-top: 0.75rem; /* py-3 */
+      padding-bottom: 0.75rem;
+      color: #1f2937; /* text-gray-800 */
+    }
+    input {
+      border: 1px solid #d1d5db; /* border border-gray-300 */
+      border-radius: 0.375rem; /* rounded */
+      padding-left: 0.5rem; /* px-2 */
+      padding-right: 0.5rem;
+      padding-top: 0.25rem; /* py-1 */
+      padding-bottom: 0.25rem;
+      outline: none;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    input:focus {
+      box-shadow: 0 0 0 2px #a5b4fc; /* focus:ring-2 focus:ring-indigo-300 */
+      border-color: #a5b4fc;
+    }
+    @media (max-width:640px){
+      table,thead,tbody,tr,th,td{display:block}
+      th,td{position:relative;padding-left:50%!important}
+      th::before,td::before{position:absolute;left:.75rem;top:.75rem;font-weight:600;white-space:nowrap}
+      th::before{content:attr(data-label);text-transform:uppercase;font-size:.75rem;color:#4b5563}
+      td::before{content:attr(data-label);font-size:.875rem;color:#6b7280}
+      tr{margin-bottom:1rem;border-bottom:1px solid #e5e7eb}
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <header class="px-6 py-4 flex items-center gap-3">
+    <img src="logo.png" alt="Logo" class="h-10 object-contain">
+    <h1 class="text-2xl font-semibold text-gray-800">Sales Tracker</h1>
+  </header>
+  <main class="flex-grow container mx-auto px-6 py-8">
+    <!-- Price Inputs -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Resource Diabetic ₹</label>
+        <input id="price-resd" type="number" value="0" class="w-full"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Optifast ₹</label>
+        <input id="price-opti" type="number" value="118752" class="w-full"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Resource ₹</label>
+        <input id="price-res" type="number" value="5064.66" class="w-full"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Fiberchoice ₹</label>
+        <input id="price-fib" type="number" value="0" class="w-full"></div>
+    </div>
+    <!-- Data Table -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead>
+          <tr>
+            <th data-label="Stockist">Stockist</th>
+            <th data-label="Res-Di Units">Resource Diabetic<br>Units</th>
+            <th data-label="Res-Di Total">Resource Diabetic<br>Total ₹</th>
+            <th data-label="Opti Units">Optifast<br>Units</th>
+            <th data-label="Opti Total">Optifast<br>Total ₹</th>
+            <th data-label="Res Units">Resource<br>Units</th>
+            <th data-label="Res Total">Resource<br>Total ₹</th>
+            <th data-label="Fib Units">Fiberchoice<br>Units</th>
+            <th data-label="Fib Total">Fiberchoice<br>Total ₹</th>
+            <th data-label="Grand Total">Grand Total<br>₹</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="body-sales" class="divide-y divide-gray-100"></tbody>
+        <tfoot class="bg-indigo-50">
+          <tr>
+            <td class="font-medium">Totals</td>
+            <td id="sum-resd-u" class="text-center">0</td>
+            <td id="sum-resd-v" class="text-center">0.00</td>
+            <td id="sum-opti-u" class="text-center">0</td>
+            <td id="sum-opti-v" class="text-center">0.00</td>
+            <td id="sum-res-u" class="text-center">0</td>
+            <td id="sum-res-v" class="text-center">0.00</td>
+            <td id="sum-fib-u" class="text-center">0</td>
+            <td id="sum-fib-v" class="text-center">0.00</td>
+            <td id="sum-grand" class="text-center">0.00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- Add Button -->
+    <div class="mt-4">
+      <button id="btn-add" class="btn-add">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 5v14m7-7H5"/>
+        </svg>
+        <span>Add Stockist</span>
+      </button>
+    </div>
+  </main>
+  <script>
+    const priceResD = el('price-resd'), priceOpti = el('price-opti'),
+          priceRes = el('price-res'), priceFib = el('price-fib'),
+          body = el('body-sales'), btnAdd = el('btn-add'),
+          sums = { rdU: el('sum-resd-u'), rdV: el('sum-resd-v'),
+                   oU: el('sum-opti-u'), oV: el('sum-opti-v'),
+                   rU: el('sum-res-u'), rV: el('sum-res-v'),
+                   fU: el('sum-fib-u'), fV: el('sum-fib-v'),
+                   grand: el('sum-grand') };
+    const STORAGE='tracker-units-first'; let state=JSON.parse(localStorage.getItem(STORAGE)||'{"rows":[]}');
+    state.rows.forEach(addRow); calc();
+    btnAdd.onclick=_=>{addRow();persist();calc()};
+    [priceResD,priceOpti,priceRes,priceFib].forEach(i=>i.oninput=_=>{persist();calc()});
+    function addRow(d={name:'',rd:0,o:0,r:0,f:0}) {
+      const tr=document.createElement('tr'); tr.innerHTML=`
+      <td><input class="w-full p-1 border rounded" value="${d.name}" placeholder="Name"></td>
+      <td data-label="Res-Di Units"><input type=number min=0 class="qty-rd p-1 border rounded text-center" value="${d.rd}"></td>
+      <td data-label="Res-Di Total" class="cell-rd-v">0.00</td>
+      <td data-label="Opti Units"><input type=number min=0 class="qty-o p-1 border rounded text-center" value="${d.o}"></td>
+      <td data-label="Opti Total" class="cell-o-v">0.00</td>
+      <td data-label="Res Units"><input type=number min=0 class="qty-r p-1 border rounded text-center" value="${d.r}"></td>
+      <td data-label="Res Total" class="cell-r-v">0.00</td>
+      <td data-label="Fib Units"><input type=number min=0 class="qty-f p-1 border rounded text-center" value="${d.f}"></td>
+      <td data-label="Fib Total" class="cell-f-v">0.00</td>
+      <td data-label="Grand Total" class="cell-grand">0.00</td>
+      <td class="text-center"><button class="btn-del">🗑</button></td>`;
+      tr.querySelectorAll('input').forEach(i=>i.oninput=_=>{persist();calc()});
+      tr.querySelector('.btn-del').onclick=_=>{tr.remove();persist();calc()};
+      body.appendChild(tr);
+    }
+    function calc() {
+      let rdU=0,oU=0,rU=0,fU=0,rdV=0,oV=0,rV=0,fV=0, g=0,
+          pRD=+priceResD.value,pO=+priceOpti.value,pR=+priceRes.value,pF=+priceFib.value;
+      [...body.rows].forEach(tr=>{
+        const qRD=+tr.querySelector('.qty-rd').value||0,
+              qO=+tr.querySelector('.qty-o').value||0,
+              qR=+tr.querySelector('.qty-r').value||0,
+              qF=+tr.querySelector('.qty-f').value||0,
+              vRD=qRD*pRD, vO=qO*pO, vR=qR*pR, vF=qF*pF,
+              rowTotal=vRD+vO+vR+vF;
+        tr.querySelector('.cell-rd-v').textContent=vRD.toFixed(2);
+        tr.querySelector('.cell-o-v').textContent=vO.toFixed(2);
+        tr.querySelector('.cell-r-v').textContent=vR.toFixed(2);
+        tr.querySelector('.cell-f-v').textContent=vF.toFixed(2);
+        tr.querySelector('.cell-grand').textContent=rowTotal.toFixed(2);
+        rdU+=qRD; oU+=qO; rU+=qR; fU+=qF;
+        rdV+=vRD; oV+=vO; rV+=vR; fV+=vF;
+        g+=rowTotal;
+      });
+      sums.rdU.textContent=rdU; sums.rdV.textContent=rdV.toFixed(2);
+      sums.oU.textContent=oU; sums.oV.textContent=oV.toFixed(2);
+      sums.rU.textContent=rU; sums.rV.textContent=rV.toFixed(2);
+      sums.fU.textContent=fU; sums.fV.textContent=fV.toFixed(2);
+      sums.grand.textContent=g.toFixed(2);
+    }
+    function persist(){
+      const rows=[...body.rows].map(tr=>({
+        name:tr.cells[0].firstChild.value,
+        rd:tr.querySelector('.qty-rd').value,
+        o:tr.querySelector('.qty-o').value,
+        r:tr.querySelector('.qty-r').value,
+        f:tr.querySelector('.qty-f').value
+      }));
+      localStorage.setItem(STORAGE,JSON.stringify({rows}));
+    }
+    function el(id){return document.getElementById(id);}
+  </script>
+</body>
+</html>
+
+
