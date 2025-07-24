@@ -3,176 +3,202 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>2025 Sales Tracker &bull; Mohan</title>
+  <title>2025 Sales Tracker • Perplexity AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background: #f8fafc; font-family: Inter, sans-serif; color: #222; }
+    :root {
+      --primary: #0a1931;
+      --accent: #185adb;
+      --surface: #f7fafd;
+      --shadow: 0 4px 16px 0 rgba(24,90,219,0.05);
+    }
+    body {
+      background: var(--surface);
+      font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+      color: #17202a;
+      transition: background 0.3s;
+    }
     header {
       background: #fff;
-      padding: 2rem 0 1.5rem 0;
-      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+      box-shadow: var(--shadow);
+      padding: 2.5rem 0 1.2rem 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
-      margin-bottom: 1rem;
+      align-items: center;
+      border-radius: 0 0 1.5rem 1.5rem;
+      margin-bottom: 1.5rem;
     }
     .logo-wrap {
-      width: 48px; height: 48px;
-      background: #f1f5f9;
-      border-radius: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 1px 8px 0 #e4e4e7;
-      margin-bottom: 0.8rem;
+      width: 60px; height: 60px;
+      background: var(--surface);
+      border-radius: 15px;
+      box-shadow: 0 2px 12px 0 #e3e7ee;
+      margin-bottom: 1rem;
     }
     .logo-img {
-      width: 32px;
-      height: 32px;
-      /* Use filter: grayscale for subtlety + color drop-shadow for visibility */
-      filter: drop-shadow(0 0 2px #6366f1);
+      width: 40px;
+      height: 40px;
       object-fit: contain;
-      opacity: 0.95;
+      filter: drop-shadow(0 1px 2px var(--accent));
+      opacity: 0.98;
     }
     h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: #4338ca;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--accent);
       margin: 0;
     }
     .subtext {
-      font-size: 1rem; color: #64748b; letter-spacing: 0.02em; margin-top: 0.2em;
+      font-size: 1.08rem;
+      color: #677483;
+      letter-spacing: 0.04em;
+      margin-top: 0.15em;
     }
-    .card {
+    .main-card {
       background: #fff;
-      border-radius: 1rem;
-      box-shadow: 0 2px 8px 0 #f1f5f9;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      max-width: 1000px;
+      border-radius: 1.35rem;
+      box-shadow: var(--shadow);
+      padding: 2.5rem 2rem 2rem 2rem;
+      max-width: 1050px;
+      margin-bottom: 2rem;
     }
     input {
-      border: none;
-      background: #f1f5f9;
-      border-radius: 0.6rem;
-      padding: 0.8em 0.7em;
-      font-size: 1.05rem;
+      border: 1px solid #e5eaf3;
+      background: #f1f4fa;
+      border-radius: 0.65rem;
+      padding: 0.9em 0.7em;
+      font-size: 1.06rem;
       outline: none;
       width: 100%;
-      box-shadow: 0 1px 4px 0 #e0e7ff;
-      margin-bottom: 0.15rem;
-      transition: box-shadow 0.25s, background 0.2s;
+      box-shadow: 0 2px 8px 0 #e3eafc;
+      margin-bottom: 0.02rem;
+      color: var(--primary);
+      transition: box-shadow 0.2s, background 0.2s, border-color 0.2s;
     }
     input:focus {
-      background: #e0e7ff;
-      box-shadow: 0 3px 16px 0 #dbeafe;
+      background: #eaf1fe;
+      border-color: var(--accent);
+      box-shadow: 0 3px 20px 0 #b7d0fd;
     }
     label {
       display: block;
-      font-size: 0.97rem;
-      color: #6b7280;
-      margin-bottom: 0.12rem;
+      font-size: 1.01rem;
+      color: #5a6790;
+      margin-bottom: 0.195rem;
       font-weight: 500;
     }
-    #filter-stockist { max-width: 250px; margin-bottom: 1.1rem; }
-    /* Table styles */
+    #filter-stockist { max-width: 260px; margin-bottom: 1.22rem; }
     table {
       width: 100%;
       border-collapse: separate;
-      border-spacing: 0 0.6rem;
+      border-spacing: 0 0.7rem;
+      margin-top: 0.5rem;
     }
     thead tr {
+      background: #f3f6fb;
       position: sticky; top: 0;
-      background: #f4f4ff;
       z-index: 1;
     }
     th, td {
       border: none;
       text-align: center;
-      padding: 1em 0.6em;
+      padding: 1em 0.58em;
       vertical-align: middle;
     }
     th {
-      font-size: 0.92rem;
-      color: #6366f1;
-      background: #f6f7fd;
+      font-size: 0.96rem;
+      color: var(--accent);
+      background: #f1f4fa;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 600;
-      border-radius: 0.5em 0.5em 0 0;
+      font-weight: 700;
+      border-radius: 0.52em 0.52em 0 0;
+      letter-spacing: 0.07em;
     }
     td {
-      background: #f1f5f9;
-      border-radius: 0.6em;
-      font-size: 1.01rem;
-      color: #23282d;
-      box-shadow: 0 2px 8px 0 #f1f5f9;
+      background: #f7fafd;
+      border-radius: 0.7em;
+      font-size: 1.02rem;
+      color: #22313a;
+      box-shadow: 0 3px 10px 0 #e9eafd77;
       font-weight: 500;
+      transition: background 0.18s;
     }
     tbody tr:hover td {
-      background: #e0e7ff;
-      color: #3730a3;
-      transition: background 0.2s, color 0.2s;
+      background: #ddefff;
+      color: var(--accent);
+      transition: background 0.16s, color 0.15s;
     }
     .btn-add {
-      background-color: #4338ca;
+      background: var(--accent);
       color: #fff;
-      padding: 0.7em 1.3em;
-      border-radius: 0.65em;
-      font-size: 1.05rem;
-      font-weight: 500;
-      display: flex; align-items: center; gap: 0.4em;
-      box-shadow: 0 2px 8px 0 #e0e7ff;
-      transition: background 0.18s, box-shadow 0.18s;
+      padding: 0.76em 1.34em;
+      border-radius: 0.7em;
+      font-size: 1.07rem;
+      font-weight: 600;
+      outline: none;
+      border: none;
+      display: flex; align-items: center; gap: 0.45em;
+      box-shadow: 0 3px 16px 0 #e3eafc;
+      transition: background 0.16s, box-shadow 0.16s;
+      cursor: pointer;
     }
-    .btn-add:hover { background: #6366f1; box-shadow: 0 3px 12px 0 #c7d2fe; }
+    .btn-add:hover { background: #102154; box-shadow: 0 4px 18px 0 #b7d0fd; }
     .btn-del {
-      color: #ef4444;
+      color: #e74c3c;
       background: transparent;
       border: none;
-      font-size: 1.1em;
-      border-radius: 0.4em;
+      font-size: 1.2em;
+      border-radius: 0.47em;
       cursor: pointer;
-      padding: 0.3em 0.7em;
+      padding: 0.36em 0.76em;
       transition: color 0.2s, background 0.2s;
     }
-    .btn-del:hover { color: #b91c1c; background: #ffe4e6; }
-    .totals-row td { background: #f4f3ff !important; color: #a21caf; font-weight: 700; }
+    .btn-del:hover { color: #c0392b; background: #fdecea; }
+    .totals-row td {
+      background: #eaf0ff !important ;
+      color: #185adb;
+      font-weight: 700;
+      font-size: 1.03em;
+    }
     .highlight {
       animation: highlight-bg 1s;
     }
     @keyframes highlight-bg {
-      from { background-color: #c7d2fe; }
+      from { background-color: #b7d0fd; }
       to { background-color: transparent; }
     }
-    @media (max-width:700px) {
+    @media (max-width:900px) {
       html { font-size: 95%; }
-      .card { padding: 1em; }
-      th, td { padding: 0.55em 0.25em;  }
+      .main-card { padding: 1.2em; }
+      th, td { padding: 0.46em 0.18em;  }
     }
-    @media (max-width:480px) {
-      header { padding: 1.4em 0 0.7em 0; }
-      .logo-wrap { width: 38px; height: 38px; }
-      .card { padding: 0.6em; }
-      .btn-add { padding: 0.6em 0.8em;}
+    @media (max-width:610px) {
+      header { padding: 1.1em 0 0.48em 0; }
+      .logo-wrap { width: 42px; height: 42px; }
+      .main-card { padding: 0.55em; }
+      .btn-add { padding: 0.6em 0.9em;}
+      #filter-stockist { margin-bottom: 0.7rem; }
+      th, td { font-size: 0.95em; }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center">
+<body class="min-h-screen flex flex-col items-center">
   <header>
     <div class="logo-wrap">
-      <!-- Replace with your SVG, PNG or Emoji for direct visibility (SVG for best minimalist look) -->
-      <img src="https://img.icons8.com/ios-filled/50/4338ca/commercial.png" alt="Logo" class="logo-img">
+      <!-- Neutral MNC-style logo, you can use your own or SVG corporate mark -->
+      <img src="https://img.icons8.com/ios-filled/50/185adb/artificial-intelligence.png" alt="Logo" class="logo-img">
     </div>
     <h1>Sales Tracker</h1>
-    <div class="subtext">2025 &bull; Made by Mohan</div>
+    <div class="subtext">2025 &bull; Made by Perplexity AI</div>
   </header>
   <main class="flex-grow flex flex-col w-full items-center">
-    <section class="card w-full max-w-xl mx-auto">
+    <section class="main-card w-full max-w-2xl mx-auto">
       <!-- Price Inputs -->
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-5">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-7">
         <div>
           <label>Resource Diabetic ₹</label>
           <input id="price-resd" type="number" value="0">
@@ -229,7 +255,7 @@
         </table>
       </div>
       <!-- Add & Clear Buttons -->
-      <div class="flex gap-4 mt-6 justify-center">
+      <div class="flex gap-4 mt-7 justify-center">
         <button id="btn-add" class="btn-add">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                viewBox="0 0 24 24" stroke="currentColor">
@@ -243,7 +269,7 @@
     </section>
   </main>
   <footer class="text-center text-xs text-gray-500 py-4">
-    &copy; 2025 Sales Tracker &bull; Made by Mohan
+    &copy; 2025 Sales Tracker &bull; Made by Perplexity AI
   </footer>
   <script>
     function el(id){return document.getElementById(id);}
@@ -261,7 +287,7 @@
                    rU: el('sum-res-u'), rV: el('sum-res-v'),
                    fU: el('sum-fib-u'), fV: el('sum-fib-v'),
                    grand: el('sum-grand') };
-    const STORAGE='tracker-units-first-minimalist';
+    const STORAGE='tracker-units-first-mnc';
     let state=JSON.parse(localStorage.getItem(STORAGE)||'{"rows":[]}');
     state.rows.forEach(addRow); calc();
     btnAdd.onclick=_=>{addRow();persist();calc()};
@@ -326,7 +352,7 @@
       }));
       localStorage.setItem(STORAGE,JSON.stringify({rows}));
     }
-    // Filter/search for stockists
+    // Stockist search functionality
     el('filter-stockist').oninput = e => {
       const filter = e.target.value.toLowerCase();
       [...body.rows].forEach(tr => {
