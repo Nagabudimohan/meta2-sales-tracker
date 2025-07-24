@@ -1,311 +1,751 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>2025 Sales Tracker • Mohan</title>
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Custom styles -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* ===== CSS Variables for quick theme tweaks ===== */
     :root {
-      --clr-primary: #0a1931;
-      --clr-accent: #185adb;
-      --clr-surface: #f8fbff;
-      --shadow-1: 0 4px 12px rgba(10,25,49,0.05);
-      --shadow-2: 0 12px 32px rgba(10,25,49,0.08); /* layered shadow trick[15] */
+      --primary: #0a1931;
+      --accent: #185adb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444eea 0%, #764ba2 100%);
+      --glass: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
     }
-
-    /* ===== Base & layout ===== */
+    
     body {
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      background: var(--clr-surface);
-      color: var(--clr-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      background: var(--surface);
+      font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+      position: relative;
     }
+    
+    /* Particle background */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Glassmorphism effects */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    }
+    
+    /* Neumorphism for product cards */
+    .neuro-card {
+      background: linear-gradient(145deg, #f0f4ff, #dae4ff);
+      border-radius: 20px;
+      box-shadow: 
+        12px 12px 24px rgba(162, 179, 255, 0.2),
+        -12px -12px 24px rgba(255, 255, 255, 0.8);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .neuro-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        15px 15px 30px rgba(162, 179, 255, 0.3),
+        -15px -15px 30px rgba(255, 255, 255, 0.9);
+    }
+    
+    /* Product-specific brand colors */
+    .resource-diabetic {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3);
+    }
+    
+    .optifast {
+      background: linear-gradient(135deg, #4ECDC4, #44A08D);
+      box-shadow: 0 20px 40px rgba(78, 205, 196, 0.3);
+    }
+    
+    .fiber-choice {
+      background: linear-gradient(135deg, #A8EDEA, #FED6E3);
+      box-shadow: 0 20px 40px rgba(168, 237, 234, 0.3);
+    }
+    
     header {
-      background: #fff;
-      box-shadow: var(--shadow-1);
-      border-radius: 0 0 1.5rem 1.5rem;
-      padding: 2.4rem 1rem 1.4rem;
+      background: var(--glass);
+      backdrop-filter: blur(30px) saturate(200%);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 2rem 0 1.5rem;
       text-align: center;
-      margin-bottom: 1.8rem;
-      animation: slideDown 0.8s cubic-bezier(.7,1.5,.3,1) both;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
     }
-    @keyframes slideDown {
-      from {transform: translateY(-50px); opacity:0;}
-      to   {transform: none;               opacity:1;}
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmer 3s infinite;
     }
-    .logo-wrap {
-      width: 60px; height: 60px;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(8px);
-      border-radius: 1rem;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1rem;
-      box-shadow: var(--shadow-2);
+    
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .brand-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .brand-logo:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .brand-logo img {
+      width: 40px;
+      height: 40px;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+    }
+    
     h1 {
-      font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em;
-      color: var(--clr-accent);
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, #e0e7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
     }
-    .subtext {font-size: 1.05rem; color: #5c6b7a;}
-
-    /* ===== Card ===== */
-    .card {
-      background: #ffffffcc; /* translucent for soft glass effect */
-      backdrop-filter: blur(10px) saturate(160%);
-      border-radius: 1.25rem;
-      box-shadow: var(--shadow-2);
-      padding: 2.2rem 2rem;
-      max-width: 1050px;
+    
+    .subtext {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 0.5rem;
+    }
+    
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 16px 48px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .product-card {
+      border-radius: 20px;
+      padding: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      opacity: 0.1;
+      transition: opacity 0.3s ease;
+    }
+    
+    .product-card:hover::before {
+      opacity: 0.2;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+    
+    .product-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+    
+    .product-icon img {
+      width: 50px;
+      height: 50px;
+      filter: brightness(0) invert(1);
+    }
+    
+    input {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      font-size: 1.1rem;
+      color: white;
       width: 100%;
-      animation: fadeUp 0.9s 0.2s cubic-bezier(.7,1.5,.3,1) both;
-    }
-    @keyframes fadeUp {
-      from {transform: translateY(60px) scale(.97); opacity:0;}
-      to   {transform: none;                opacity:1;}
-    }
-
-    /* ===== Inputs ===== */
-    input[type="number"], input[type="search"] {
-      appearance: textfield;
-      -moz-appearance: textfield;
-      border: 1px solid #dbe0ea;
-      background: #f1f5ff;
-      border-radius: 0.7rem;
-      padding: 0.85rem 0.75rem;
-      font-size: 1.05rem;
-      width: 100%;
-      transition: box-shadow 0.25s, background 0.25s, border-color 0.25s;
-    }
-    input:focus-visible { /* accessible focus ring[1][7] */
+      transition: all 0.3s ease;
       outline: none;
-      border-color: var(--clr-accent);
-      box-shadow: 0 0 0 3px rgba(24,90,219,.25);
     }
-
-    /* ===== Table ===== */
-    table {width:100%; border-spacing:0 0.7rem;}
-    thead tr {background:#eef3ff; position:sticky; top:0; z-index:1;}
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    input:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      transform: scale(1.02);
+    }
+    
+    label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Enhanced table styling */
+    .table-container {
+      background: var(--glass);
+      backdrop-filter: blur(30px) saturate(200%);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
     th {
-      font-size:0.9rem; text-transform:uppercase; font-weight:700;
-      color:var(--clr-accent); padding:1rem 0.6rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
+    
     td {
-      background:#ffffffee; backdrop-filter:blur(4px);
-      font-size:1.05rem; font-weight:500; color:#1f2d3d;
-      padding:1rem 0.6rem; border-radius:0.7rem;
-      box-shadow:var(--shadow-1);
-      transition:background 0.18s, transform 0.18s;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
     }
+    
+    tbody tr {
+      transition: all 0.3s ease;
+    }
+    
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.01);
+    }
+    
     tbody tr:hover td {
-      background:#e0ecff;
-      transform:scale(1.012);
+      color: #ffffff;
     }
+    
+    .totals-row {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+      font-weight: 700;
+    }
+    
     .totals-row td {
-      background:#e6edff!important; color:var(--clr-accent); font-weight:700;
+      color: #ffffff;
+      font-size: 1.1rem;
     }
-
-    /* ===== Buttons ===== */
+    
+    /* Modern button styles */
     .btn {
-      display:inline-flex; align-items:center; gap:0.45em;
-      font-weight:600; border:none; cursor:pointer;
-      border-radius:0.75rem; transition:background 0.2s, box-shadow 0.2s;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-add {
-      background:var(--clr-accent); color:#fff; padding:0.8em 1.4em;
-      box-shadow:var(--shadow-2);
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
     }
-    .btn-add:hover {background:#0e2b6d;}
-    .btn-del {color:#e74c3c; background:transparent; font-size:1.2em; padding:0.35em;}
-    .btn-del:hover {color:#c0392b;}
-    .btn-clear {background:#ffebee; color:#b71c1c; padding:0.7em 1.2em;}
-    .btn-clear:hover {background:#ffd7de;}
-
-    /* ===== Animating totals highlight ===== */
-    .highlight {animation: flash 1s;}
-    @keyframes flash {0%{background:#c3d8ff;}100%{background:transparent;}}
-
-    /* ===== Responsive tweaks ===== */
-    @media(max-width:600px){
-      html{font-size:93%;}
-      .card{padding:1rem;}
-      th,td{padding:0.55rem 0.3rem;}
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, var(--error), #dc2626);
+      color: white;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .btn-danger:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+      transform: translateY(-2px);
+    }
+    
+    /* Search styling */
+    #filter-stockist {
+      max-width: 300px;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Animation effects */
+    .highlight {
+      animation: highlight-pulse 1.2s ease-out;
+    }
+    
+    @keyframes highlight-pulse {
+      0% { 
+        background: rgba(16, 185, 129, 0.3);
+        transform: scale(1);
+      }
+      50% { 
+        background: rgba(16, 185, 129, 0.5);
+        transform: scale(1.02);
+      }
+      100% { 
+        background: transparent;
+        transform: scale(1);
+      }
+    }
+    
+    /* Floating animation for product cards */
+    .product-card {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .product-card:nth-child(2) {
+      animation-delay: -2s;
+    }
+    
+    .product-card:nth-child(3) {
+      animation-delay: -4s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+      margin-top: 3rem;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 0 1rem;
+      }
+      
+      .glass-card {
+        padding: 1.5rem;
+      }
+      
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      th, td {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- ===== Header ===== -->
-  <header>
-    <div class="logo-wrap">
-      <!-- Replace with your own PNG/SVG if desired -->
-      <img src="https://img.icons8.com/fluency/48/sales-performance.png" alt="Logo" class="logo-img">
+  <!-- Particle background -->
+  <div id="particles-js"></div>
+  
+  <div class="content-wrapper">
+    <!-- Header -->
+    <header>
+      <div class="logo-container">
+        <div class="brand-logo">
+          <img src="https://img.icons8.com/fluency/48/sales-performance.png" alt="Sales Tracker">
+        </div>
+      </div>
+      <h1>Premium Sales Tracker</h1>
+      <p class="subtext">2025 • Created by Mohan</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+      <!-- Product Cards -->
+      <div class="glass-card">
+        <h2 style="color: rgba(255,255,255,0.95); font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem; text-align: center;">Product Pricing</h2>
+        <div class="product-grid">
+          <!-- Resource Diabetic -->
+          <div class="product-card resource-diabetic">
+            <div class="product-icon">
+              <img src="https://img.icons8.com/fluency/48/glucose-meter.png" alt="Resource Diabetic">
+            </div>
+            <label>Resource Diabetic ₹</label>
+            <input id="price-resd" type="number" value="0" placeholder="Enter price">
+          </div>
+          
+          <!-- Optifast -->
+          <div class="product-card optifast">
+            <div class="product-icon">
+              <img src="https://img.icons8.com/fluency/48/protein-shake.png" alt="Optifast">
+            </div>
+            <label>Optifast ₹</label>
+            <input id="price-opti" type="number" value="118752" placeholder="Enter price">
+          </div>
+          
+          <!-- Fiber Choice -->
+          <div class="product-card fiber-choice">
+            <div class="product-icon">
+              <img src="https://img.icons8.com/fluency/48/vegetarian-food.png" alt="Fiber Choice">
+            </div>
+            <label>Fiber Choice ₹</label>
+            <input id="price-fib" type="number" value="0" placeholder="Enter price">
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales Data -->
+      <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h2 style="color: rgba(255,255,255,0.95); font-size: 1.5rem; font-weight: 600; margin: 0;">Stockist Data</h2>
+          <input id="filter-stockist" type="search" placeholder="🔍 Search Stockists...">
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Stockist</th>
+                <th>Res-Di Units</th>
+                <th>Res-Di Total</th>
+                <th>Opti Units</th>
+                <th>Opti Total</th>
+                <th>Fiber Units</th>
+                <th>Fiber Total</th>
+                <th>Grand Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="body-sales"></tbody>
+            <tfoot>
+              <tr class="totals-row">
+                <td><strong>Totals</strong></td>
+                <td id="sum-resd-u">0</td>
+                <td id="sum-resd-v">₹0.00</td>
+                <td id="sum-opti-u">0</td>
+                <td id="sum-opti-v">₹0.00</td>
+                <td id="sum-fib-u">0</td>
+                <td id="sum-fib-v">₹0.00</td>
+                <td id="sum-grand">₹0.00</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+          <button id="btn-add" class="btn btn-primary">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 5v14m7-7H5"/>
+            </svg>
+            Add Stockist
+          </button>
+          <button id="btn-clear" class="btn btn-secondary">
+            Clear All Data
+          </button>
+        </div>
+      </div>
     </div>
-    <h1>Sales Tracker</h1>
-    <p class="subtext">2025 • Made by Mohan</p>
-  </header>
 
-  <!-- ===== Main Card ===== -->
-  <main class="flex-grow flex flex-col items-center w-full">
-    <section class="card">
-      <!-- Product Prices -->
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
-        <div><label>Resource Diabetic ₹</label><input id="price-resd" type="number" value="0"></div>
-        <div><label>Optifast ₹</label><input id="price-opti" type="number" value="118752"></div>
-        <div><label>Resource ₹</label><input id="price-res" type="number" value="5064.66"></div>
-        <div><label>Fiber Choice ₹</label><input id="price-fib" type="number" value="0"></div>
-      </div>
+    <!-- Footer -->
+    <footer>
+      © 2025 Premium Sales Tracker • Designed by Mohan
+    </footer>
+  </div>
 
-      <!-- Search -->
-      <input id="filter-stockist" type="search" placeholder="Search Stockists…" class="mb-6">
-
-      <!-- Data Table -->
-      <div class="overflow-x-auto">
-        <table>
-          <thead>
-            <tr>
-              <th>Stockist</th><th>Res-Di Units</th><th>Res-Di Total</th>
-              <th>Opti Units</th><th>Opti Total</th>
-              <th>Res Units</th><th>Res Total</th>
-              <th>Fiber Units</th><th>Fiber Total</th>
-              <th>Grand Total</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="body-sales"></tbody>
-          <tfoot>
-            <tr class="totals-row">
-              <td>Totals</td>
-              <td id="sum-resd-u">0</td><td id="sum-resd-v">0.00</td>
-              <td id="sum-opti-u">0</td><td id="sum-opti-v">0.00</td>
-              <td id="sum-res-u">0</td><td id="sum-res-v">0.00</td>
-              <td id="sum-fib-u">0</td><td id="sum-fib-v">0.00</td>
-              <td id="sum-grand">0.00</td><td></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex flex-wrap gap-4 justify-center mt-8">
-        <button id="btn-add" class="btn btn-add">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-               viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 5v14m7-7H5"/>
-          </svg><span>Add Stockist</span>
-        </button>
-        <button id="btn-clear" class="btn btn-clear">Clear All</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="text-center text-xs text-gray-500 py-4">
-    © 2025 Sales Tracker • Made by Mohan
-  </footer>
-
-  <!-- ===== Logic ===== -->
+  <!-- JavaScript -->
   <script>
-    // ---------- Helpers ----------
+    // Initialize particles
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 50, density: { enable: true, value_area: 800 }},
+        color: { value: '#ffffff' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.1, random: true },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: '#ffffff',
+          opacity: 0.05,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: 'none',
+          random: false,
+          straight: false,
+          out_mode: 'out',
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: { enable: true, mode: 'repulse' },
+          onclick: { enable: true, mode: 'push' },
+          resize: true
+        },
+        modes: {
+          repulse: { distance: 100, duration: 0.4 },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+
+    // Core functionality
     const $ = id => document.getElementById(id);
-    const animate = (cell, val) => {cell.textContent = val;
-      cell.classList.remove('highlight'); void cell.offsetWidth; cell.classList.add('highlight');};
-
-    // ---------- Elements ----------
-    const priceResD=$('price-resd'), priceOpti=$('price-opti'),
-          priceRes=$('price-res'), priceFib=$('price-fib'),
-          body=$('body-sales'), filter=$('filter-stockist'),
-          btnAdd=$('btn-add'), btnClear=$('btn-clear'),
-          sums={rdU:$('sum-resd-u'),rdV:$('sum-resd-v'),
-                oU:$('sum-opti-u'),oV:$('sum-opti-v'),
-                rU:$('sum-res-u'),rV:$('sum-res-v'),
-                fU:$('sum-fib-u'),fV:$('sum-fib-v'),
-                grand:$('sum-grand')};
-
-    // ---------- Local Storage ----------
-    const STORAGE='sales-tracker-2025';
-    let state=JSON.parse(localStorage.getItem(STORAGE)||'{"rows":[]}');
-    state.rows.forEach(addRow); calc();
-
-    // ---------- Event Listeners ----------
-    btnAdd.onclick = () => {addRow(); save(); calc();};
-    btnClear.onclick = () =>{
-      if(confirm('Clear all stockist data?')) {body.innerHTML=''; save(); calc();}
+    
+    const animateSum = (cell, val) => {
+      cell.textContent = val;
+      cell.classList.remove('highlight');
+      void cell.offsetWidth;
+      cell.classList.add('highlight');
     };
-    [priceResD,priceOpti,priceRes,priceFib].forEach(inp=>inp.oninput=()=>{save(); calc();});
+
+    const priceResD = $('price-resd'), priceOpti = $('price-opti'),
+          priceFib = $('price-fib'), body = $('body-sales'),
+          filter = $('filter-stockist'), btnAdd = $('btn-add'),
+          btnClear = $('btn-clear'),
+          sums = {
+            rdU: $('sum-resd-u'), rdV: $('sum-resd-v'),
+            oU: $('sum-opti-u'), oV: $('sum-opti-v'),
+            fU: $('sum-fib-u'), fV: $('sum-fib-v'),
+            grand: $('sum-grand')
+          };
+
+    const STORAGE = 'premium-sales-tracker-2025';
+    let state = JSON.parse(localStorage.getItem(STORAGE) || '{"rows":[]}');
+    
+    state.rows.forEach(addRow);
+    calc();
+
+    // Event listeners
+    btnAdd.onclick = () => { addRow(); save(); calc(); };
+    btnClear.onclick = () => {
+      if (confirm('🚨 Clear all stockist data? This action cannot be undone.')) {
+        body.innerHTML = '';
+        save();
+        calc();
+      }
+    };
+
+    [priceResD, priceOpti, priceFib].forEach(inp => 
+      inp.oninput = () => { save(); calc(); }
+    );
+
     filter.oninput = e => {
-      const f=e.target.value.toLowerCase();
-      [...body.rows].forEach(tr=>{
-        const name=tr.cells[0].firstChild.value.toLowerCase();
-        tr.style.display=name.includes(f)?'':'none';
+      const f = e.target.value.toLowerCase();
+      [...body.rows].forEach(tr => {
+        const name = tr.cells[0].firstChild.value.toLowerCase();
+        tr.style.display = name.includes(f) ? '' : 'none';
       });
     };
 
-    // ---------- Functions ----------
-    function addRow(d={name:'',rd:0,o:0,r:0,f:0}){
-      const tr=document.createElement('tr');
-      tr.innerHTML=`
-        <td><input class="w-full" value="${d.name}" placeholder="Name"/></td>
-        <td><input type="number" min="0" class="qty-rd" value="${d.rd}"/></td>
-        <td class="cell-rd-v">0.00</td>
-        <td><input type="number" min="0" class="qty-o" value="${d.o}"/></td>
-        <td class="cell-o-v">0.00</td>
-        <td><input type="number" min="0" class="qty-r" value="${d.r}"/></td>
-        <td class="cell-r-v">0.00</td>
-        <td><input type="number" min="0" class="qty-f" value="${d.f}"/></td>
-        <td class="cell-f-v">0.00</td>
-        <td class="cell-grand">0.00</td>
-        <td><button class="btn-del">🗑</button></td>`;
+    function addRow(d = {name: '', rd: 0, o: 0, f: 0}) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input style="background: rgba(255,255,255,0.1); color: white;" value="${d.name}" placeholder="Stockist Name"/></td>
+        <td><input type="number" min="0" class="qty-rd" style="background: rgba(255,255,255,0.1); color: white;" value="${d.rd}"/></td>
+        <td class="cell-rd-v">₹0.00</td>
+        <td><input type="number" min="0" class="qty-o" style="background: rgba(255,255,255,0.1); color: white;" value="${d.o}"/></td>
+        <td class="cell-o-v">₹0.00</td>
+        <td><input type="number" min="0" class="qty-f" style="background: rgba(255,255,255,0.1); color: white;" value="${d.f}"/></td>
+        <td class="cell-f-v">₹0.00</td>
+        <td class="cell-grand">₹0.00</td>
+        <td><button class="btn btn-danger">🗑</button></td>`;
       body.appendChild(tr);
 
-      // row events
-      tr.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{save(); calc();});
-      tr.querySelector('.btn-del').onclick=()=>{
-        if(confirm('Delete this stockist?')){tr.remove(); save(); calc();}
+      tr.querySelectorAll('input').forEach(inp => inp.oninput = () => { save(); calc(); });
+      tr.querySelector('.btn-danger').onclick = () => {
+        if (confirm('Delete this stockist?')) {
+          tr.remove();
+          save();
+          calc();
+        }
       };
     }
 
-    function calc(){
-      let rdU=0,oU=0,rU=0,fU=0,rdV=0,oV=0,rV=0,fV=0,g=0,
-          pRD=+priceResD.value,pO=+priceOpti.value,pR=+priceRes.value,pF=+priceFib.value;
-      [...body.rows].forEach(tr=>{
-        const qRD=+tr.querySelector('.qty-rd').value||0,
-              qO =+tr.querySelector('.qty-o').value||0,
-              qR =+tr.querySelector('.qty-r').value||0,
-              qF =+tr.querySelector('.qty-f').value||0,
-              vRD=qRD*pRD, vO=qO*pO, vR=qR*pR, vF=qF*pF,
-              rowTotal=vRD+vO+vR+vF;
-        tr.querySelector('.cell-rd-v').textContent=vRD.toFixed(2);
-        tr.querySelector('.cell-o-v' ).textContent=vO.toFixed(2);
-        tr.querySelector('.cell-r-v' ).textContent=vR.toFixed(2);
-        tr.querySelector('.cell-f-v' ).textContent=vF.toFixed(2);
-        tr.querySelector('.cell-grand').textContent=rowTotal.toFixed(2);
+    function calc() {
+      let rdU = 0, oU = 0, fU = 0, rdV = 0, oV = 0, fV = 0, g = 0;
+      const pRD = +priceResD.value, pO = +priceOpti.value, pF = +priceFib.value;
+      
+      [...body.rows].forEach(tr => {
+        const qRD = +tr.querySelector('.qty-rd').value || 0,
+              qO = +tr.querySelector('.qty-o').value || 0,
+              qF = +tr.querySelector('.qty-f').value || 0,
+              vRD = qRD * pRD, vO = qO * pO, vF = qF * pF,
+              rowTotal = vRD + vO + vF;
+              
+        tr.querySelector('.cell-rd-v').textContent = `₹${vRD.toFixed(2)}`;
+        tr.querySelector('.cell-o-v').textContent = `₹${vO.toFixed(2)}`;
+        tr.querySelector('.cell-f-v').textContent = `₹${vF.toFixed(2)}`;
+        tr.querySelector('.cell-grand').textContent = `₹${rowTotal.toFixed(2)}`;
 
-        rdU+=qRD; oU+=qO; rU+=qR; fU+=qF;
-        rdV+=vRD; oV+=vO; rV+=vR; fV+=vF; g+=rowTotal;
+        rdU += qRD; oU += qO; fU += qF;
+        rdV += vRD; oV += vO; fV += vF;
+        g += rowTotal;
       });
-      animate(sums.rdU, rdU);           animate(sums.rdV, rdV.toFixed(2));
-      animate(sums.oU , oU);            animate(sums.oV , oV.toFixed(2));
-      animate(sums.rU , rU);            animate(sums.rV , rV.toFixed(2));
-      animate(sums.fU , fU);            animate(sums.fV , fV.toFixed(2));
-      animate(sums.grand, g.toFixed(2));
+      
+      animateSum(sums.rdU, rdU);
+      animateSum(sums.rdV, `₹${rdV.toFixed(2)}`);
+      animateSum(sums.oU, oU);
+      animateSum(sums.oV, `₹${oV.toFixed(2)}`);
+      animateSum(sums.fU, fU);
+      animateSum(sums.fV, `₹${fV.toFixed(2)}`);
+      animateSum(sums.grand, `₹${g.toFixed(2)}`);
     }
 
-    function save(){
-      const rows=[...body.rows].map(tr=>({
-        name:tr.cells[0].firstChild.value,
-        rd  :tr.querySelector('.qty-rd').value,
-        o   :tr.querySelector('.qty-o' ).value,
-        r   :tr.querySelector('.qty-r' ).value,
-        f   :tr.querySelector('.qty-f' ).value
+    function save() {
+      const rows = [...body.rows].map(tr => ({
+        name: tr.cells[0].firstChild.value,
+        rd: tr.querySelector('.qty-rd').value,
+        o: tr.querySelector('.qty-o').value,
+        f: tr.querySelector('.qty-f').value
       }));
       localStorage.setItem(STORAGE, JSON.stringify({rows}));
     }
