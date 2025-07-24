@@ -5,33 +5,124 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>2025 Sales Tracker • Mohan</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
-    /* --- unchanged minimalist styling --- */
-    :root { --primary:#0a1931; --accent:#185adb; --surface:#f7fafd; }
-    body{background:var(--surface);font-family:Inter,Arial,sans-serif;color:#222c36;display:flex;flex-direction:column;align-items:center;min-height:100vh;}
-    header{background:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.05);border-radius:0 0 1.4rem 1.4rem;padding:2rem 1rem 1rem;text-align:center;margin-bottom:1.8rem;}
-    h1{font-size:2.1rem;font-weight:700;color:var(--accent);margin:0;}
-    .subtext{font-size:1rem;color:#677483;margin-top:.25rem;}
-    .card{background:#fff;border-radius:1.25rem;box-shadow:0 8px 24px rgba(0,0,0,0.06);padding:2rem;max-width:1000px;width:100%;}
-    label{display:flex;align-items:center;gap:.5rem;font-size:.95rem;font-weight:600;color:#374151;margin-bottom:.3rem;}
-    label img{width:24px;height:24px;}
-    input{border:1px solid #dbe0ea;background:#f1f4fa;border-radius:.6rem;padding:.6rem .75rem;font-size:1rem;width:100%;transition:box-shadow .2s,border-color .2s;}
-    input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,90,219,.25);}
-    table{width:100%;border-collapse:separate;border-spacing:0 .7rem;margin-top:.6rem;}
-    th{background:#eef3ff;color:var(--accent);text-transform:uppercase;font-size:.8rem;font-weight:700;padding:.9rem .5rem;border-radius:.5rem 0 0 0;}
-    td{background:#ffffff;border-radius:.6rem;font-size:.95rem;font-weight:500;color:#1f2d3d;padding:.9rem .5rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
-    tbody tr:hover td{background:#e0ecff;}
-    .totals-row td{background:#eaf0ff;font-weight:700;color:var(--accent);}
-    .btn{display:flex;align-items:center;gap:.4rem;font-weight:600;border:none;cursor:pointer;border-radius:.6rem;transition:background .2s;}
-    .btn-add{background:var(--accent);color:#fff;padding:.7rem 1.2rem;box-shadow:0 3px 12px rgba(24,90,219,.25);}
-    .btn-add:hover{background:#102154;}
-    .btn-del{color:#e74c3c;background:transparent;font-size:1.1rem;padding:.3rem .6rem;}
-    .btn-del:hover{color:#c0392b;}
-    footer{text-align:center;font-size:.85rem;color:#6b7280;margin-top:2rem;padding-bottom:2rem;}
+    :root {
+      --primary: #0a1931;
+      --accent: #185adb;
+      --surface: #f7fafd;
+    }
+    body {
+      background: var(--surface);
+      font-family: Inter, Arial, sans-serif;
+      color: var(--primary);
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh; margin: 0;
+    }
+    header {
+      background: white;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      border-radius: 0 0 1.4rem 1.4rem;
+      padding: 2rem 1rem 1rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 2.1rem; font-weight: 700; color: var(--accent); margin: 0;
+    }
+    .subtext {
+      font-size: 1rem; color: #677483; margin-top: 0.25rem;
+    }
+    main.card {
+      background: white;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      padding: 2rem;
+      width: 100%; max-width: 1000px;
+    }
+    label {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.95rem; font-weight: 600; color: #374151;
+      margin-bottom: 0.3rem;
+    }
+    label img {
+      width: 24px; height: 24px; object-fit: contain;
+    }
+    input {
+      border: 1px solid #dbe0ea;
+      background: #f1f4fa;
+      border-radius: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      font-size: 1rem;
+      width: 100%;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(24,90,219,0.25);
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.7rem;
+      margin-top: 1.5rem;
+    }
+    th {
+      background: #eef3ff;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.9rem 0.5rem;
+      text-align: center;
+    }
+    td {
+      background: white;
+      border-radius: 0.6rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #1f2d3d;
+      padding: 0.9rem 0.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      text-align: center;
+    }
+    tbody tr:hover td {
+      background: #e0ecff;
+    }
+    .totals-row td {
+      background: #eaf0ff;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .btn {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-weight: 600; border: none; cursor: pointer;
+      border-radius: 0.6rem; transition: background 0.2s;
+    }
+    .btn-add {
+      background: var(--accent); color: white;
+      padding: 0.7rem 1.2rem;
+      box-shadow: 0 3px 12px rgba(24,90,219,0.25);
+    }
+    .btn-add:hover {
+      background: #102154;
+    }
+    .btn-del {
+      color: #e74c3c; background: transparent;
+      font-size: 1.1rem; padding: 0.3rem 0.6rem;
+    }
+    .btn-del:hover {
+      color: #c0392b;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-top: 2rem;
+      padding-bottom: 2rem;
+    }
   </style>
 </head>
-
 <body>
   <header>
     <h1>Sales Tracker</h1>
@@ -39,57 +130,55 @@
   </header>
 
   <main class="card">
-    <!-- Price Inputs with logos -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+    <!-- Price Inputs with Logos -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div>
         <label>
-          <img src="https://img.icons8.com/fluency/48/glucose-meter.png" alt="Resource Diabetic">
+          <img src="data:image/jpeg;base64,/***Base64 of attachment 3***/" alt="Resource Diabetic">
           Resource Diabetic ₹
         </label>
         <input id="price-resd" type="number" value="0">
       </div>
       <div>
         <label>
-          <img src="https://img.icons8.com/fluency/48/protein-shake.png" alt="Optifast">
+          <img src="data:image/jpeg;base64,/***Base64 of attachment 1***/" alt="Optifast">
           Optifast ₹
         </label>
         <input id="price-opti" type="number" value="118752">
       </div>
       <div>
         <label>
-          <img src="https://img.icons8.com/fluency/48/vegetarian-food.png" alt="Fiber Choice">
+          <img src="data:image/jpeg;base64,/***Base64 of attachment 2***/" alt="Fiber Choice">
           Fiber Choice ₹
         </label>
         <input id="price-fib" type="number" value="0">
       </div>
     </div>
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Stockist</th><th>Res-Di Units</th><th>Res-Di Total</th>
-            <th>Opti Units</th><th>Opti Total</th>
-            <th>Fiber Units</th><th>Fiber Total</th>
-            <th>Grand Total</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="body-sales"></tbody>
-        <tfoot>
-          <tr class="totals-row">
-            <td>Totals</td>
-            <td id="sum-resd-u">0</td><td id="sum-resd-v">0.00</td>
-            <td id="sum-opti-u">0</td><td id="sum-opti-v">0.00</td>
-            <td id="sum-fib-u">0</td><td id="sum-fib-v">0.00</td>
-            <td id="sum-grand">0.00</td><td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+    <!-- Sales Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Stockist</th><th>Res-Di Units</th><th>Res-Di Total</th>
+          <th>Opti Units</th><th>Opti Total</th>
+          <th>Fiber Units</th><th>Fiber Total</th>
+          <th>Grand Total</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="body-sales"></tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td>Totals</td>
+          <td id="sum-resd-u">0</td><td id="sum-resd-v">0.00</td>
+          <td id="sum-opti-u">0</td><td id="sum-opti-v">0.00</td>
+          <td id="sum-fib-u">0</td><td id="sum-fib-v">0.00</td>
+          <td id="sum-grand">0.00</td><td></td>
+        </tr>
+      </tfoot>
+    </table>
 
-    <!-- Buttons -->
-    <div class="flex gap-4 justify-center mt-6">
+    <!-- Action Buttons -->
+    <div class="flex justify-center mt-6 gap-4">
       <button id="btn-add" class="btn btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
              viewBox="0 0 24 24" stroke="currentColor">
@@ -103,23 +192,26 @@
 
   <footer>© 2025 Sales Tracker • Mohan</footer>
 
-  <!-- Logic (unchanged) -->
   <script>
-    const $=id=>document.getElementById(id);
-    const priceResD=$('price-resd'),priceOpti=$('price-opti'),priceFib=$('price-fib'),
-          body=$('body-sales'),btnAdd=$('btn-add'),
-          sums={rdU:$('sum-resd-u'),rdV:$('sum-resd-v'),
-                oU:$('sum-opti-u'),oV:$('sum-opti-v'),
-                fU:$('sum-fib-u'),fV:$('sum-fib-v'),
-                grand:$('sum-grand')};
-    const STORAGE='sales-tracker-2025';let state=JSON.parse(localStorage.getItem(STORAGE)||'{"rows":[]}');
-    state.rows.forEach(addRow);calc();
-    btnAdd.onclick=()=>{addRow();save();calc();};
-    [priceResD,priceOpti,priceFib].forEach(i=>i.oninput=()=>{save();calc();});
+    const $ = id => document.getElementById(id);
+    const priceResD = $('price-resd'), priceOpti = $('price-opti'), priceFib = $('price-fib'),
+          body = $('body-sales'), btnAdd = $('btn-add'),
+          sums = {
+            rdU: $('sum-resd-u'), rdV: $('sum-resd-v'),
+            oU: $('sum-opti-u'), oV: $('sum-opti-v'),
+            fU: $('sum-fib-u'), fV: $('sum-fib-v'),
+            grand: $('sum-grand')
+          };
+    const STORAGE = 'sales-tracker-2025';
+    let state = JSON.parse(localStorage.getItem(STORAGE) || '{"rows":[]}');
+    state.rows.forEach(addRow); calc();
 
-    function addRow(d={name:'',rd:0,o:0,f:0}){
-      const tr=document.createElement('tr');
-      tr.innerHTML=`
+    btnAdd.onclick = () => { addRow(); save(); calc(); };
+    [priceResD, priceOpti, priceFib].forEach(inp => inp.oninput = () => { save(); calc(); });
+
+    function addRow(d = {name:'', rd:0, o:0, f:0}) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
         <td><input class="w-full" placeholder="Name" value="${d.name}"></td>
         <td><input type="number" min="0" class="qty-rd" value="${d.rd}"></td>
         <td class="cell-rd-v">0.00</td>
@@ -128,41 +220,40 @@
         <td><input type="number" min="0" class="qty-f" value="${d.f}"></td>
         <td class="cell-f-v">0.00</td>
         <td class="cell-grand">0.00</td>
-        <td><button class="btn-del">🗑</button></td>`;
+        <td><button class="btn btn-del">🗑</button></td>`;
       body.appendChild(tr);
-      tr.querySelectorAll('input').forEach(i=>i.oninput=()=>{save();calc();});
-      tr.querySelector('.btn-del').onclick=()=>{tr.remove();save();calc();};
+      tr.querySelectorAll('input').forEach(i => i.oninput = () => { save(); calc(); });
+      tr.querySelector('.btn-del').onclick = () => { tr.remove(); save(); calc(); };
     }
 
-    function calc(){
-      let rdU=0,oU=0,fU=0,rdV=0,oV=0,fV=0,g=0,
-          pRD=+priceResD.value,pO=+priceOpti.value,pF=+priceFib.value;
-      [...body.rows].forEach(tr=>{
+    function calc() {
+      let rdU=0, oU=0, fU=0, rdV=0, oV=0, fV=0, g=0,
+          pRD=+priceResD.value, pO=+priceOpti.value, pF=+priceFib.value;
+      [...body.rows].forEach(tr => {
         const qRD=+tr.querySelector('.qty-rd').value||0,
               qO=+tr.querySelector('.qty-o').value||0,
               qF=+tr.querySelector('.qty-f').value||0,
-              vRD=qRD*pRD,vO=qO*pO,vF=qF*pF,rowTot=vRD+vO+vF;
-        tr.querySelector('.cell-rd-v').textContent=vRD.toFixed(2);
-        tr.querySelector('.cell-o-v').textContent=vO.toFixed(2);
-        tr.querySelector('.cell-f-v').textContent=vF.toFixed(2);
-        tr.querySelector('.cell-grand').textContent=rowTot.toFixed(2);
-        rdU+=qRD;oU+=qO;fU+=qF;
-        rdV+=vRD;oV+=vO;fV+=vF;g+=rowTot;
+              vRD=qRD*pRD, vO=qO*pO, vF=qF*pF, rowTotal=vRD+vO+vF;
+        tr.querySelector('.cell-rd-v').textContent = vRD.toFixed(2);
+        tr.querySelector('.cell-o-v').textContent = vO.toFixed(2);
+        tr.querySelector('.cell-f-v').textContent = vF.toFixed(2);
+        tr.querySelector('.cell-grand').textContent = rowTotal.toFixed(2);
+        rdU+=qRD; oU+=qO; fU+=qF; rdV+=vRD; oV+=vO; fV+=vF; g+=rowTotal;
       });
-      sums.rdU.textContent=rdU;sums.rdV.textContent=rdV.toFixed(2);
-      sums.oU.textContent=oU;sums.oV.textContent=oV.toFixed(2);
-      sums.fU.textContent=fU;sums.fV.textContent=fV.toFixed(2);
-      sums.grand.textContent=g.toFixed(2);
+      sums.rdU.textContent = rdU; sums.rdV.textContent = rdV.toFixed(2);
+      sums.oU.textContent = oU; sums.oV.textContent = oV.toFixed(2);
+      sums.fU.textContent = fU; sums.fV.textContent = fV.toFixed(2);
+      sums.grand.textContent = g.toFixed(2);
     }
 
-    function save(){
-      const rows=[...body.rows].map(tr=>({
-        name:tr.cells[0].firstChild.value,
-        rd:tr.querySelector('.qty-rd').value,
-        o:tr.querySelector('.qty-o').value,
-        f:tr.querySelector('.qty-f').value
+    function save() {
+      const rows = [...body.rows].map(tr => ({
+        name: tr.cells[0].firstChild.value,
+        rd: tr.querySelector('.qty-rd').value,
+        o: tr.querySelector('.qty-o').value,
+        f: tr.querySelector('.qty-f').value
       }));
-      localStorage.setItem(STORAGE,JSON.stringify({rows}));
+      localStorage.setItem(STORAGE, JSON.stringify({rows}));
     }
   </script>
 </body>
