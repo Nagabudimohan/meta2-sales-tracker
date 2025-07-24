@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>2025 Sales Tracker • Mohan</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SheetJS for Excel export -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
@@ -14,130 +13,135 @@
       --surface: #f7fafd;
     }
     body {
-      margin:0; background:var(--surface);
-      font-family:Inter,Arial,sans-serif;
-      color:var(--primary);
-      display:flex; flex-direction:column; align-items:center;
-      min-height:100vh;
+      margin: 0;
+      background: var(--surface);
+      font-family: Inter, Arial, sans-serif;
+      color: var(--primary);
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh;
     }
-    /* Header */
     header {
-      position:relative;
-      width:100%; max-width:1000px;
-      background:#fff;
-      box-shadow:0 4px 16px rgba(0,0,0,0.05);
-      border-radius:0 0 1rem 1rem;
-      padding:3rem 1rem 1rem;   /* extra top padding for logo */
-      text-align:center;
-      margin-top:2rem;
+      position: relative;
+      width: 100%; max-width: 1000px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      border-radius: 0 0 1rem 1rem;
+      padding: 3rem 1rem 1rem; /* extra top padding for logo */
+      text-align: center;
+      margin-top: 2rem;
     }
-    /* Floating tracker logo */
     .track-logo {
-      position:absolute;
-      top:0; left:50%;
-      transform:translate(-50%,-50%);
-      width:64px; height:64px;
-      background:#fff; border-radius:50%;
-      padding:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 64px; height: 64px;
+      background: #fff; border-radius: 50%;
+      padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     h1 {
-      margin:0.5rem 0 0.25rem;
-      font-size:2.1rem; font-weight:700;
-      color:var(--accent);
+      margin: 0.5rem 0 0.25rem;
+      font-size: 2.1rem; font-weight: 700;
+      color: var(--accent);
     }
     .subtext {
-      margin:0; color:#677483; font-size:1rem;
+      margin: 0; color: #677483; font-size: 1rem;
     }
-    /* Main card */
     main.card {
-      width:100%; max-width:1000px;
-      background:#fff; border-radius:1rem;
-      box-shadow:0 8px 24px rgba(0,0,0,0.06);
-      padding:2rem 1.5rem; margin:-1.5rem 0 2rem;
+      width: 100%; max-width: 1000px;
+      background: #fff; border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      padding: 2rem 1.5rem; margin: -1.5rem 0 2rem;
     }
-    /* Grid for inputs */
     .products-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 1.5rem;
     }
     label {
-      display:flex; align-items:center; gap:0.5rem;
-      font-weight:600; color:#374151; font-size:0.95rem;
-      margin-bottom:0.25rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      font-weight: 600; color: #374151; font-size: 0.95rem;
+      margin-bottom: 0.25rem;
     }
     label img {
-      width:28px; height:28px; object-fit:contain;
+      width: 28px; height: 28px; object-fit: contain;
     }
     input[type="number"], input[type="search"] {
-      width:100%; padding:0.6rem 0.75rem;
-      border:1px solid #dbe0ea; border-radius:0.6rem;
-      background:#f1f4fa; font-size:1rem;
-      transition:box-shadow .2s,border-color .2s;
+      width: 100%; padding: 0.6rem 0.75rem;
+      border: 1px solid #dbe0ea; border-radius: 0.6rem;
+      background: #f1f4fa; font-size: 1rem;
+      transition: box-shadow .2s, border-color .2s;
     }
     input:focus {
-      outline:none; border-color:var(--accent);
-      box-shadow:0 0 0 3px rgba(24,90,219,0.25);
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(24,90,219,0.25);
     }
-    /* Search box */
-    .search-box { margin:1.5rem 0; text-align:center; }
-    .search-box input { max-width:300px; }
-    /* Table */
+    .search-box {
+      margin: 1.5rem 0; text-align: center;
+    }
+    .search-box input {
+      max-width: 300px;
+    }
     table {
-      width:100%; border-collapse:separate;
-      border-spacing:0 0.6rem; margin-top:1rem;
+      width: 100%; border-collapse: separate;
+      border-spacing: 0 0.6rem; margin-top: 1rem;
     }
     th {
-      background:#eef3ff; color:var(--accent);
-      text-transform:uppercase; font-weight:700;
-      font-size:0.8rem; padding:0.75rem 0.5rem;
-      text-align:center;
+      background: #eef3ff; color: var(--accent);
+      text-transform: uppercase; font-weight: 700;
+      font-size: 0.8rem; padding: 0.75rem 0.5rem;
+      text-align: center;
     }
     td {
-      background:#fff; border-radius:0.6rem;
-      padding:0.75rem 0.5rem; font-size:0.95rem;
-      font-weight:500; color:#1f2d3d;
-      box-shadow:0 2px 8px rgba(0,0,0,0.04);
-      text-align:center;
+      background: #fff; border-radius: 0.6rem;
+      padding: 0.75rem 0.5rem; font-size: 0.95rem;
+      font-weight: 500; color: #1f2d3d;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      text-align: center;
     }
-    tbody tr:hover td { background:#e0ecff; }
+    tbody tr:hover td {
+      background: #e0ecff;
+    }
     .totals-row td {
-      background:#eaf0ff; font-weight:700; color:var(--accent);
+      background: #eaf0ff; font-weight: 700; color: var(--accent);
     }
-    /* Buttons */
     .actions {
-      display:flex; justify-content:center; gap:1rem; margin-top:2rem;
+      display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;
     }
     .btn {
-      inline-flex; align-items:center; gap:0.5rem;
-      padding:0.7rem 1.2rem; font-weight:600; border:none;
-      border-radius:0.6rem; cursor:pointer;
-      transition:background .2s,box-shadow .2s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 1.2rem; font-weight: 600; border: none;
+      border-radius: 0.6rem; cursor: pointer;
+      transition: background .2s, box-shadow .2s;
     }
     .btn-add {
-      background:var(--accent); color:#fff;
-      box-shadow:0 3px 12px rgba(24,90,219,0.25);
+      background: var(--accent); color: #fff;
+      box-shadow: 0 3px 12px rgba(24,90,219,0.25);
     }
-    .btn-add:hover { background:#102154; }
+    .btn-add:hover {
+      background: #102154;
+    }
     .btn-download {
-      background:#10b981; color:#fff;
-      box-shadow:0 3px 12px rgba(16,185,129,0.25);
+      background: #10b981; color: #fff;
+      box-shadow: 0 3px 12px rgba(16,185,129,0.25);
     }
-    .btn-download:hover { background:#0f766e;}
+    .btn-download:hover {
+      background: #0f766e;
+    }
     .btn-del {
-      color:#e74c3c; background:transparent;
-      font-size:1.1rem; padding:0.3rem 0.6rem;
+      color: #e74c3c; background: transparent;
+      font-size: 1.1rem; padding: 0.3rem 0.6rem;
     }
-    .btn-del:hover { color:#c0392b; }
+    .btn-del:hover {
+      color: #c0392b;
+    }
     footer {
-      text-align:center; color:#6b7280;
-      margin-bottom:1rem; font-size:0.85rem;
+      text-align: center; color: #6b7280;
+      margin-bottom: 1rem; font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Header with floating logo -->
   <header>
     <img class="track-logo" src="https://img.icons8.com/fluency/96/sales-performance.png" alt="Tracker Logo"/>
     <h1>Sales Tracker</h1>
@@ -145,7 +149,7 @@
   </header>
 
   <main class="card">
-    <!-- Product price inputs with brand logos -->
+
     <div class="products-grid">
       <div>
         <label>
@@ -170,12 +174,10 @@
       </div>
     </div>
 
-    <!-- Search Stockists -->
     <div class="search-box">
       <input id="filter-stockist" type="search" placeholder="🔍 Search Stockists…"/>
     </div>
 
-    <!-- Sales data table -->
     <div class="overflow-x-auto">
       <table id="sales-table">
         <thead>
@@ -199,21 +201,25 @@
       </table>
     </div>
 
-    <!-- Action buttons -->
     <div class="actions">
       <button id="btn-add" class="btn btn-add">➕ Add Stockiest</button>
       <button id="btn-download" class="btn btn-download">📥 Download Excel</button>
     </div>
+
   </main>
 
   <footer>© 2025 Sales Tracker • Mohan</footer>
 
   <script>
     const $ = id => document.getElementById(id);
-    const priceResD = $('price-resd'), priceOpti = $('price-opti'), priceFib = $('price-fib'),
-          body = $('body-sales'), filter = $('filter-stockist'),
-          btnAdd = $('btn-add'), btnDownload = $('btn-download'),
-          sums = {
+    const priceResD = $('price-resd'),
+          priceOpti = $('price-opti'),
+          priceFib   = $('price-fib'),
+          body       = $('body-sales'),
+          filter     = $('filter-stockist'),
+          btnAdd     = $('btn-add'),
+          btnDownload= $('btn-download'),
+          sums       = {
             rdU: $('sum-resd-u'), rdV: $('sum-resd-v'),
             oU: $('sum-opti-u'), oV: $('sum-opti-v'),
             fU: $('sum-fib-u'), fV: $('sum-fib-v'),
