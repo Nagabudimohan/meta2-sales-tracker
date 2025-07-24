@@ -4,137 +4,38 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>2025 Sales Tracker</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SheetJS for Excel export -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-
   <style>
-    :root {
-      --accent: #185adb;
-      --surface: #f7fafd;
-    }
-    body {
-      margin: 0;
-      background: var(--surface);
-      font-family: Inter, Arial, sans-serif;
-      color: #0a1931;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-    header {
-      position: relative;
-      width: 100%; max-width: 1000px;
-      background: #fff;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      border-radius: 0 0 1rem 1rem;
-      padding: 3rem 1rem 1rem;
-      text-align: center;
-      margin-top: 2rem;
-    }
-    .track-logo {
-      position: absolute;
-      top: 0; left: 50%;
-      transform: translate(-50%,-50%);
-      width: 64px; height: 64px;
-      background: #fff; border-radius: 50%;
-      padding: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h1 {
-      margin: .5rem 0 .25rem;
-      font-size: 2.1rem; font-weight: 700;
-      color: var(--accent);
-    }
-    main.card {
-      width: 100%; max-width: 1000px;
-      background: #fff; border-radius: 1rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      padding: 2rem 1.5rem;
-      margin: -1.5rem 0 2rem;
-    }
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
-      gap: 1.5rem;
-    }
-    label {
-      display: flex; align-items: center; gap: .5rem;
-      font-weight: 600; color: #374151; font-size: .95rem;
-      margin-bottom: .25rem;
-    }
-    label img {
-      width: 28px; height: 28px; object-fit: contain;
-    }
-    input[type="number"], input[type="search"] {
-      width: 100%; padding: .6rem .75rem;
-      border: 1px solid #dbe0ea; border-radius: .6rem;
-      background: #f1f4fa; font-size: 1rem;
-      transition: box-shadow .2s, border-color .2s;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(24,90,219,.25);
-    }
-    .search-box {
-      margin: 1.5rem 0; text-align: center;
-    }
-    .search-box input { max-width: 300px; }
-    table {
-      width: 100%; border-collapse: separate;
-      border-spacing: 0 .6rem; margin-top: 1rem;
-    }
-    th {
-      background: #eef3ff; color: var(--accent);
-      text-transform: uppercase; font-weight: 700; font-size: .8rem;
-      padding: .75rem .5rem; text-align: center;
-    }
-    td {
-      background: #fff; border-radius: .6rem;
-      padding: .75rem .5rem; font-size: .95rem;
-      font-weight: 500; color: #1f2d3d;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      text-align: center;
-    }
-    tbody tr:hover td { background: #e0ecff; }
-    .totals-row td {
-      background: #eaf0ff; font-weight: 700; color: var(--accent);
-    }
-    .actions {
-      display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .7rem 1.2rem; font-weight: 600; border: none;
-      border-radius: .6rem; cursor: pointer;
-      transition: background .2s, box-shadow .2s;
-    }
-    .btn-add {
-      background: var(--accent); color: #fff;
-      box-shadow: 0 3px 12px rgba(24,90,219,.25);
-    }
-    .btn-add:hover { background: #102154; }
-    .btn-download {
-      background: #10b981; color: #fff;
-      box-shadow: 0 3px 12px rgba(16,185,129,.25);
-    }
-    .btn-download:hover { background: #0f766e; }
-    .btn-del {
-      background: none; color: #e74c3c; font-size: 1.1rem;
-      padding: .3rem .6rem;
-    }
-    .btn-del:hover { color: #c0392b; }
-    footer {
-      text-align: center; color: #6b7280;
-      margin-bottom: 1rem; font-size: .85rem;
-    }
+    :root{--accent:#185adb;--surface:#f7fafd;}
+    body{margin:0;background:var(--surface);font-family:Inter,Arial,sans-serif;color:#0a1931;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{position:relative;width:100%;max-width:1000px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.05);border-radius:0 0 1rem 1rem;padding:3rem 1rem 1rem;text-align:center;margin-top:2rem}
+    .track-logo{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;background:#fff;border-radius:50%;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    h1{margin:.5rem 0 .25rem;font-size:2.1rem;font-weight:700;color:var(--accent)}
+    main.card{width:100%;max-width:1000px;background:#fff;border-radius:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.06);padding:2rem 1.5rem;margin:-1.5rem 0 2rem}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+    label{display:flex;align-items:center;gap:.5rem;font-weight:600;color:#374151;font-size:.95rem;margin-bottom:.25rem}
+    label img{width:28px;height:28px;object-fit:contain}
+    input[type=number],input[type=search]{width:100%;padding:.6rem .75rem;border:1px solid #dbe0ea;border-radius:.6rem;background:#f1f4fa;font-size:1rem;transition:box-shadow .2s,border-color .2s}
+    input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,90,219,.25)}
+    .search-box{margin:1.5rem 0;text-align:center}
+    .search-box input{max-width:300px}
+    table{width:100%;border-collapse:separate;border-spacing:0 .6rem;margin-top:1rem}
+    th{background:#eef3ff;color:var(--accent);text-transform:uppercase;font-weight:700;font-size:.8rem;padding:.75rem;text-align:center}
+    td{background:#fff;border-radius:.6rem;padding:.75rem;font-size:.95rem;font-weight:500;color:#1f2d3d;box-shadow:0 2px 8px rgba(0,0,0,.04);text-align:center}
+    tbody tr:hover td{background:#e0ecff}
+    .totals-row td{background:#eaf0ff;font-weight:700;color:var(--accent)}
+    .actions{display:flex;justify-content:center;gap:1rem;margin-top:2rem}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.2rem;font-weight:600;border:none;border-radius:.6rem;cursor:pointer;transition:background .2s,box-shadow .2s}
+    .btn-add{background:var(--accent);color:#fff;box-shadow:0 3px 12px rgba(24,90,219,.25)}
+    .btn-add:hover{background:#102154}
+    .btn-download{background:#10b981;color:#fff;box-shadow:0 3px 12px rgba(16,185,129,.25)}
+    .btn-download:hover{background:#0f766e}
+    .btn-del{background:none;color:#e74c3c;font-size:1.1rem;padding:.3rem .6rem}
+    .btn-del:hover{color:#c0392b}
+    footer{text-align:center;color:#6b7280;margin-bottom:1rem;font-size:.85rem}
   </style>
 </head>
-
 <body>
 
   <header>
@@ -143,8 +44,6 @@
   </header>
 
   <main class="card">
-
-    <!-- Product pricing inputs -->
     <div class="products-grid">
       <div>
         <label><img src="https://img.icons8.com/fluency/48/glucose-meter.png" alt="Resource Diabetic"/>Resource Diabetic ₹</label>
@@ -160,12 +59,10 @@
       </div>
     </div>
 
-    <!-- Search stockists -->
     <div class="search-box">
       <input id="filter-stockist" type="search" placeholder="🔍 Search Stockists…"/>
     </div>
 
-    <!-- Sales data table -->
     <div class="overflow-x-auto">
       <table id="sales-table">
         <thead>
@@ -189,107 +86,85 @@
       </table>
     </div>
 
-    <!-- Action buttons -->
     <div class="actions">
       <button id="btn-add" class="btn btn-add">➕ Add Stockiest</button>
       <button id="btn-download" class="btn btn-download">📥 Download Excel</button>
     </div>
-
   </main>
 
   <footer>© 2025 Sales Tracker</footer>
 
   <script>
-    // shorthand
-    const $ = id => document.getElementById(id);
+    const $=id=>document.getElementById(id);
+    const priceResD=$('price-resd'), priceOpti=$('price-opti'), priceFib=$('price-fib'),
+          tbody=$('body-sales'), filter=$('filter-stockist'),
+          btnAdd=$('btn-add'), btnDL=$('btn-download'),
+          sums={ rdU:$('sum-resd-u'), rdV:$('sum-resd-v'),
+                 opU:$('sum-opti-u'), opV:$('sum-opti-v'),
+                 fbU:$('sum-fib-u'), fbV:$('sum-fib-v'),
+                 grand:$('sum-grand') };
 
-    // elements
-    const priceResD = $('price-resd'),
-          priceOpti = $('price-opti'),
-          priceFib  = $('price-fib'),
-          tbody      = $('body-sales'),
-          filter     = $('filter-stockist'),
-          btnAdd     = $('btn-add'),
-          btnDL      = $('btn-download'),
-          sums       = {
-            rdU: $('sum-resd-u'), rdV: $('sum-resd-v'),
-            opU: $('sum-opti-u'), opV: $('sum-opti-v'),
-            fbU: $('sum-fib-u'), fbV: $('sum-fib-v'),
-            grand: $('sum-grand')
-          };
-
-    // local storage key
-    const KEY = 'sales-tracker-rows';
-    let state = JSON.parse(localStorage.getItem(KEY) || '[]');
+    const KEY='sales-tracker-data';
+    let state=JSON.parse(localStorage.getItem(KEY)||'[]');
     state.forEach(addRow);
     recalc();
 
-    // event listeners
-    btnAdd.onclick = () => { addRow(); persist(); recalc(); };
-    [priceResD, priceOpti, priceFib].forEach(el => el.oninput = () => { persist(); recalc(); });
-    filter.oninput = e => {
-      const q = e.target.value.toLowerCase();
-      Array.from(tbody.rows).forEach(row => {
-        row.style.display = row.cells[0].firstChild.value.toLowerCase().includes(q) ? '' : 'none';
+    btnAdd.onclick = ()=>{ addRow(); persist(); recalc(); };
+    [priceResD,priceOpti,priceFib].forEach(i=>i.oninput=()=>{ persist(); recalc(); });
+    filter.oninput = e=>{
+      const q=e.target.value.toLowerCase();
+      Array.from(tbody.rows).forEach(tr=>{
+        tr.style.display = tr.cells[0].firstChild.value.toLowerCase().includes(q)?'':'none';
       });
     };
-    btnDL.onclick = () => {
+    btnDL.onclick = ()=>{
       const wb = XLSX.utils.table_to_book($('sales-table'), { sheet: 'Sales' });
       XLSX.writeFile(wb, 'SalesTracker.xlsx');
     };
 
-    // add a new row
     function addRow(d={name:'',rd:0,op:0,fb:0}) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
         <td><input class="w-full" placeholder="Name" value="${d.name}"></td>
-        <td><input type="number" min="0" class="q-rd" value="${d.rd}"></td>
+        <td><input type=number min=0 class="q-rd" value="${d.rd}"></td>
         <td class="v-rd">0.00</td>
-        <td><input type="number" min="0" class="q-op" value="${d.op}"></td>
+        <td><input type=number min=0 class="q-op" value="${d.op}"></td>
         <td class="v-op">0.00</td>
-        <td><input type="number" min="0" class="q-fb" value="${d.fb}"></td>
+        <td><input type=number min=0 class="q-fb" value="${d.fb}"></td>
         <td class="v-fb">0.00</td>
         <td class="v-grand">0.00</td>
         <td><button class="btn btn-del">🗑</button></td>`;
       tbody.appendChild(tr);
-      // wire inputs
-      tr.querySelectorAll('input').forEach(i=>i.oninput=()=>{persist();recalc();});
-      tr.querySelector('.btn-del').onclick=()=>{
-        tr.remove(); persist(); recalc();
-      };
+      tr.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{ persist(); recalc(); });
+      tr.querySelector('.btn-del').onclick=()=>{ tr.remove(); persist(); recalc(); };
     }
 
-    // recalc totals and values
-    function recalc(){
-      let rdU=0,opU=0,fbU=0, rdV=0,opV=0,fbV=0, grand=0;
+    function recalc() {
+      let ru=0,ou=0,fu=0, rv=0,ov=0,fv=0, gt=0;
       Array.from(tbody.rows).forEach(tr=>{
-        const qrd = +tr.querySelector('.q-rd').value||0,
-              qop = +tr.querySelector('.q-op').value||0,
-              qfb = +tr.querySelector('.q-fb').value||0,
-              vrd = qrd * +priceResD.value,
-              vop = qop * +priceOpti.value,
-              vfb = qfb * +priceFib.value,
-              rowSum = vrd + vop + vfb;
-        tr.querySelector('.v-rd').textContent = vrd.toFixed(2);
-        tr.querySelector('.v-op').textContent = vop.toFixed(2);
-        tr.querySelector('.v-fb').textContent = vfb.toFixed(2);
-        tr.querySelector('.v-grand').textContent = rowSum.toFixed(2);
-        rdU += qrd; opU += qop; fbU += qfb;
-        rdV += vrd; opV += vop; fbV += vfb; grand += rowSum;
+        const qr=+tr.querySelector('.q-rd').value||0,
+              qo=+tr.querySelector('.q-op').value||0,
+              qf=+tr.querySelector('.q-fb').value||0,
+              vr=qr*+priceResD.value, vo=qo*+priceOpti.value, vf=qf*+priceFib.value,
+              sum=vr+vo+vf;
+        tr.querySelector('.v-rd').textContent = vr.toFixed(2);
+        tr.querySelector('.v-op').textContent = vo.toFixed(2);
+        tr.querySelector('.v-fb').textContent = vf.toFixed(2);
+        tr.querySelector('.v-grand').textContent = sum.toFixed(2);
+        ru+=qr;ou+=qo;fu+=qf; rv+=vr;ov+=vo;fv+=vf; gt+=sum;
       });
-      sums.rdU.textContent = rdU; sums.rdV.textContent = rdV.toFixed(2);
-      sums.opU.textContent = opU; sums.opV.textContent = opV.toFixed(2);
-      sums.fbU.textContent = fbU; sums.fbV.textContent = fbV.toFixed(2);
-      sums.grand.textContent = grand.toFixed(2);
+      sums.rdU.textContent = ru; sums.rdV.textContent = rv.toFixed(2);
+      sums.opU.textContent = ou; sums.opV.textContent = ov.toFixed(2);
+      sums.fbU.textContent = fu; sums.fbV.textContent = fv.toFixed(2);
+      sums.grand.textContent = gt.toFixed(2);
     }
 
-    // persist to localStorage
-    function persist(){
+    function persist() {
       const rows = Array.from(tbody.rows).map(tr=>({
-        name: tr.cells[0].firstChild.value,
-        rd:   tr.querySelector('.q-rd').value,
-        op:   tr.querySelector('.q-op').value,
-        fb:   tr.querySelector('.q-fb').value
+        name:tr.cells[0].firstChild.value,
+        rd:tr.querySelector('.q-rd').value,
+        op:tr.querySelector('.q-op').value,
+        fb:tr.querySelector('.q-fb').value
       }));
       localStorage.setItem(KEY, JSON.stringify(rows));
     }
