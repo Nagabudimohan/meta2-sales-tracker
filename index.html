@@ -4,190 +4,182 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>2025 Sales Tracker • Mohan</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
   <style>
     :root {
-      --primary: #0a1931;
-      --accent: #185adb;
-      --surface: #f7fafd;
+      --primary:#0a1931; --accent:#185adb; --surface:#f7fafd;
     }
     body {
       background: var(--surface);
       font-family: Inter, Arial, sans-serif;
       color: var(--primary);
       display: flex; flex-direction: column; align-items: center;
-      min-height: 100vh; margin: 0;
+      min-height: 100vh; margin:0;
     }
+    /* Header */
     header {
-      background: white;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      border-radius: 0 0 1.4rem 1.4rem;
-      padding: 2rem 1rem 1rem;
-      text-align: center;
-      margin-bottom: 2rem;
+      width:100%; max-width:1000px;
+      background:#fff; box-shadow:0 4px 16px rgba(0,0,0,0.05);
+      border-radius:0 0 1rem 1rem; padding:2rem 1rem 1rem;
+      text-align:center; position:relative;
+    }
+    header img.track-logo {
+      position:absolute; top:1rem; left:50%; transform:translateX(-50%);
+      width:60px; height:60px;
     }
     h1 {
-      font-size: 2.1rem; font-weight: 700; color: var(--accent); margin: 0;
+      font-size:2.25rem; font-weight:700;
+      color:var(--accent); margin:0.5rem 0 0;
     }
     .subtext {
-      font-size: 1rem; color: #677483; margin-top: 0.25rem;
+      font-size:1rem; color:#677483; margin-top:0.25rem;
     }
+    /* Card */
     main.card {
-      background: white;
-      border-radius: 1.25rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      padding: 2rem;
-      width: 100%; max-width: 1000px;
+      background:#fff; border-radius:1rem;
+      box-shadow:0 8px 24px rgba(0,0,0,0.06);
+      padding:2rem; width:100%; max-width:1000px;
+      margin-top:-1rem;
     }
+    /* Labels with logos */
     label {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.95rem; font-weight: 600; color: #374151;
-      margin-bottom: 0.3rem;
+      display:flex; align-items:center; gap:0.5rem;
+      font-size:0.95rem; font-weight:600; color:#374151;
+      margin-bottom:0.25rem;
     }
     label img {
-      width: 24px; height: 24px; object-fit: contain;
+      width:28px; height:28px; object-fit:contain;
     }
-    input {
-      border: 1px solid #dbe0ea;
-      background: #f1f4fa;
-      border-radius: 0.6rem;
-      padding: 0.6rem 0.75rem;
-      font-size: 1rem;
-      width: 100%;
-      transition: box-shadow 0.2s, border-color 0.2s;
+    /* Inputs */
+    input[type=number], input[type=search] {
+      border:1px solid #dbe0ea; background:#f1f4fa;
+      border-radius:0.6rem; padding:0.6rem 0.75rem;
+      font-size:1rem; width:100%;
+      transition:box-shadow .2s, border-color .2s;
     }
     input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(24,90,219,0.25);
+      outline:none; border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(24,90,219,0.25);
     }
-    .search-box {
-      margin-top: 1rem;
-      display: flex; justify-content: center;
-    }
-    .search-box input {
-      max-width: 300px;
-    }
+    /* Search */
+    .search-box { margin:1rem 0; text-align:center; }
+    /* Table */
     table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 0.7rem;
-      margin-top: 1.5rem;
+      width:100%; border-collapse:separate; border-spacing:0 0.6rem;
+      margin-top:1rem;
     }
     th {
-      background: #eef3ff;
-      color: var(--accent);
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 0.9rem 0.5rem;
-      text-align: center;
+      background:#eef3ff; color:var(--accent);
+      text-transform:uppercase; font-size:0.8rem; font-weight:700;
+      padding:0.75rem 0.5rem; text-align:center;
     }
     td {
-      background: white;
-      border-radius: 0.6rem;
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #1f2d3d;
-      padding: 0.9rem 0.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      text-align: center;
+      background:#fff; border-radius:0.6rem;
+      font-size:0.95rem; font-weight:500; color:#1f2d3d;
+      padding:0.75rem 0.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+      text-align:center;
     }
-    tbody tr:hover td {
-      background: #e0ecff;
-    }
+    tbody tr:hover td { background:#e0ecff; }
     .totals-row td {
-      background: #eaf0ff;
-      font-weight: 700;
-      color: var(--accent);
+      background:#eaf0ff; font-weight:700; color:var(--accent);
     }
+    /* Buttons */
     .btn {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-weight: 600; border: none; cursor: pointer;
-      border-radius: 0.6rem; transition: background 0.2s;
+      display:flex; align-items:center; gap:0.4rem;
+      font-weight:600; border:none; cursor:pointer; border-radius:0.6rem;
+      transition:background .2s;
     }
     .btn-add {
-      background: var(--accent); color: white;
-      padding: 0.7rem 1.2rem;
-      box-shadow: 0 3px 12px rgba(24,90,219,0.25);
+      background:var(--accent); color:#fff;
+      padding:0.7rem 1.2rem; box-shadow:0 3px 12px rgba(24,90,219,0.25);
     }
-    .btn-add:hover {
-      background: #102154;
+    .btn-add:hover { background:#102154; }
+    .btn-download {
+      background:#10b981; color:#fff;
+      padding:0.7rem 1.2rem; box-shadow:0 3px 12px rgba(16,185,129,0.25);
     }
+    .btn-download:hover { background:#0f766e; }
     .btn-del {
-      color: #e74c3c; background: transparent;
-      font-size: 1.1rem; padding: 0.3rem 0.6rem;
+      color:#e74c3c; background:transparent;
+      font-size:1.1rem; padding:0.3rem 0.6rem;
     }
-    .btn-del:hover {
-      color: #c0392b;
-    }
+    .btn-del:hover { color:#c0392b; }
     footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-top: 2rem;
-      padding-bottom: 2rem;
+      text-align:center; font-size:0.85rem;
+      color:#6b7280; margin:2rem 0 1rem;
     }
   </style>
 </head>
+
 <body>
+
   <header>
+    <!-- Sales Tracker Logo -->
+    <img class="track-logo" src="https://img.icons8.com/fluency/96/sales-performance.png" alt="Tracker Logo">
     <h1>Sales Tracker</h1>
     <p class="subtext">2025 • Made by Mohan</p>
   </header>
 
   <main class="card">
-    <!-- Price Inputs with Inline Logos -->
+
+    <!-- Pricing Inputs -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div>
         <label>
-          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." alt="Resource Diabetic">
+          <img src="data:image/jpeg;base64,/*Base64 of attachment 3*/" alt="Resource Diabetic">
           Resource Diabetic ₹
         </label>
         <input id="price-resd" type="number" value="0">
       </div>
       <div>
         <label>
-          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." alt="Optifast">
+          <img src="data:image/jpeg;base64,/*Base64 of attachment 1*/" alt="Optifast">
           Optifast ₹
         </label>
         <input id="price-opti" type="number" value="118752">
       </div>
       <div>
         <label>
-          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." alt="Fiber Choice">
+          <img src="data:image/jpeg;base64,/*Base64 of attachment 2*/" alt="Fiber Choice">
           Fiber Choice ₹
         </label>
         <input id="price-fib" type="number" value="0">
       </div>
     </div>
 
-    <!-- Search Stockist -->
+    <!-- Search Stockists -->
     <div class="search-box">
       <input id="filter-stockist" type="search" placeholder="🔍 Search Stockists…">
     </div>
 
     <!-- Sales Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>Stockist</th><th>Res-Di Units</th><th>Res-Di Total</th>
-          <th>Opti Units</th><th>Opti Total</th>
-          <th>Fiber Units</th><th>Fiber Total</th>
-          <th>Grand Total</th><th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="body-sales"></tbody>
-      <tfoot>
-        <tr class="totals-row">
-          <td>Totals</td>
-          <td id="sum-resd-u">0</td><td id="sum-resd-v">0.00</td>
-          <td id="sum-opti-u">0</td><td id="sum-opti-v">0.00</td>
-          <td id="sum-fib-u">0</td><td id="sum-fib-v">0.00</td>
-          <td id="sum-grand">0.00</td><td></td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="overflow-x-auto">
+      <table id="sales-table">
+        <thead>
+          <tr>
+            <th>Stockist</th><th>Res-Di Units</th><th>Res-Di Total</th>
+            <th>Opti Units</th><th>Opti Total</th>
+            <th>Fiber Units</th><th>Fiber Total</th>
+            <th>Grand Total</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="body-sales"></tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td>Totals</td>
+            <td id="sum-resd-u">0</td><td id="sum-resd-v">0.00</td>
+            <td id="sum-opti-u">0</td><td id="sum-opti-v">0.00</td>
+            <td id="sum-fib-u">0</td><td id="sum-fib-v">0.00</td>
+            <td id="sum-grand">0.00</td><td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
 
     <!-- Action Buttons -->
     <div class="flex justify-center mt-6 gap-4">
@@ -199,89 +191,91 @@
         </svg>
         Add Stockist
       </button>
+      <button id="btn-download" class="btn btn-download">
+        Download Excel
+      </button>
     </div>
+
   </main>
 
   <footer>© 2025 Sales Tracker • Mohan</footer>
 
   <script>
-    const $ = id => document.getElementById(id);
-    const priceResD = $('price-resd'),
-          priceOpti = $('price-opti'),
-          priceFib   = $('price-fib'),
-          body       = $('body-sales'),
-          filter     = $('filter-stockist'),
-          btnAdd     = $('btn-add'),
-          sums       = {
-            rdU: $('sum-resd-u'),
-            rdV: $('sum-resd-v'),
-            oU: $('sum-opti-u'),
-            oV: $('sum-opti-v'),
-            fU: $('sum-fib-u'),
-            fV: $('sum-fib-v'),
-            grand: $('sum-grand')
-          };
-    const STORAGE = 'sales-tracker-2025';
-    let state = JSON.parse(localStorage.getItem(STORAGE) || '{"rows":[]}');
+    const $ = id=>document.getElementById(id);
+    const priceResD=$('price-resd'), priceOpti=$('price-opti'), priceFib=$('price-fib'),
+          body=$('body-sales'), filter=$('filter-stockist'),
+          btnAdd=$('btn-add'), btnDownload=$('btn-download'),
+          sums={ rdU:$('sum-resd-u'), rdV:$('sum-resd-v'),
+                 oU:$('sum-opti-u'), oV:$('sum-opti-v'),
+                 fU:$('sum-fib-u'), fV:$('sum-fib-v'),
+                 grand:$('sum-grand') };
+    const STORAGE='sales-tracker-2025'; let state=JSON.parse(localStorage.getItem(STORAGE)||'{"rows":[]}');
     state.rows.forEach(addRow); calc();
 
-    btnAdd.onclick = () => { addRow(); save(); calc(); };
-    [priceResD, priceOpti, priceFib].forEach(i => i.oninput = () => { save(); calc(); });
-    filter.oninput = e => {
-      const f = e.target.value.toLowerCase();
-      [...body.rows].forEach(tr => {
-        const name = tr.cells[0].firstChild.value.toLowerCase();
-        tr.style.display = name.includes(f) ? '' : 'none';
+    // Events
+    btnAdd.onclick       =()=>{ addRow(); save(); calc(); };
+    [priceResD,priceOpti,priceFib].forEach(i=>i.oninput=()=>{ save(); calc(); });
+    filter.oninput      = e=>{
+      const f=e.target.value.toLowerCase();
+      [...body.rows].forEach(tr=>{
+        tr.style.display = tr.cells[0].firstChild.value.toLowerCase().includes(f)?'':'none';
       });
     };
+    btnDownload.onclick = ()=>{
+      const tbl = $('sales-table');
+      const wb = XLSX.utils.table_to_book(tbl);
+      XLSX.writeFile(wb,'SalesTracker.xlsx');
+    };
 
-    function addRow(d = {name:'', rd:0, o:0, f:0}) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
+    function addRow(d={name:'',rd:0,o:0,f:0}) {
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
         <td><input class="w-full" placeholder="Name" value="${d.name}"></td>
-        <td><input type="number" min="0" class="qty-rd" value="${d.rd}"></td>
+        <td><input type=number min=0 class="qty-rd" value="${d.rd}"></td>
         <td class="cell-rd-v">0.00</td>
-        <td><input type="number" min="0" class="qty-o" value="${d.o}"></td>
+        <td><input type=number min=0 class="qty-o" value="${d.o}"></td>
         <td class="cell-o-v">0.00</td>
-        <td><input type="number" min="0" class="qty-f" value="${d.f}"></td>
+        <td><input type=number min=0 class="qty-f" value="${d.f}"></td>
         <td class="cell-f-v">0.00</td>
         <td class="cell-grand">0.00</td>
         <td><button class="btn btn-del">🗑</button></td>`;
       body.appendChild(tr);
-      tr.querySelectorAll('input').forEach(i => i.oninput = () => { save(); calc(); });
-      tr.querySelector('.btn-del').onclick = () => { tr.remove(); save(); calc(); };
+      tr.querySelectorAll('input').forEach(i=>i.oninput=()=>{ save(); calc(); });
+      tr.querySelector('.btn-del').onclick=()=>{
+        tr.remove(); save(); calc();
+      };
     }
 
     function calc() {
-      let rdU=0, oU=0, fU=0, rdV=0, oV=0, fV=0, g=0,
+      let rdU=0,oU=0,fU=0, rdV=0,oV=0,fV=0, g=0,
           pRD=+priceResD.value, pO=+priceOpti.value, pF=+priceFib.value;
-      [...body.rows].forEach(tr => {
-        const qRD = +tr.querySelector('.qty-rd').value||0,
-              qO  = +tr.querySelector('.qty-o').value||0,
-              qF  = +tr.querySelector('.qty-f').value||0,
-              vRD = qRD*pRD, vO = qO*pO, vF = qF*pF,
-              rowTotal = vRD+vO+vF;
-        tr.querySelector('.cell-rd-v').textContent = vRD.toFixed(2);
-        tr.querySelector('.cell-o-v').textContent = vO.toFixed(2);
-        tr.querySelector('.cell-f-v').textContent = vF.toFixed(2);
-        tr.querySelector('.cell-grand').textContent = rowTotal.toFixed(2);
+      [...body.rows].forEach(tr=>{
+        const qRD=+tr.querySelector('.qty-rd').value||0,
+              qO =+tr.querySelector('.qty-o').value||0,
+              qF =+tr.querySelector('.qty-f').value||0,
+              vRD=qRD*pRD, vO=qO*pO, vF=qF*pF,
+              rowTotal=vRD+vO+vF;
+        tr.querySelector('.cell-rd-v').textContent=vRD.toFixed(2);
+        tr.querySelector('.cell-o-v' ).textContent=vO.toFixed(2);
+        tr.querySelector('.cell-f-v' ).textContent=vF.toFixed(2);
+        tr.querySelector('.cell-grand').textContent=rowTotal.toFixed(2);
         rdU+=qRD; oU+=qO; fU+=qF;
         rdV+=vRD; oV+=vO; fV+=vF; g+=rowTotal;
       });
-      sums.rdU.textContent = rdU;           sums.rdV.textContent = rdV.toFixed(2);
-      sums.oU.textContent  = oU;            sums.oV.textContent  = oV.toFixed(2);
-      sums.fU.textContent  = fU;            sums.fV.textContent  = fV.toFixed(2);
-      sums.grand.textContent = g.toFixed(2);
+      sums.rdU.textContent=rdU;     sums.rdV.textContent=rdV.toFixed(2);
+      sums.oU .textContent=oU;      sums.oV .textContent=oV.toFixed(2);
+      sums.fU .textContent=fU;      sums.fV .textContent=fV.toFixed(2);
+      sums.grand.textContent=g.toFixed(2);
     }
 
     function save() {
-      const rows = [...body.rows].map(tr => ({
-        name: tr.cells[0].firstChild.value,
-        rd:   tr.querySelector('.qty-rd').value,
-        o:    tr.querySelector('.qty-o').value,
-        f:    tr.querySelector('.qty-f').value
+      const rows=[...body.rows].map(tr=>({
+        name:tr.cells[0].firstChild.value,
+        rd:tr.querySelector('.qty-rd').value,
+        o:tr.querySelector('.qty-o').value,
+        f:tr.querySelector('.qty-f').value
       }));
-      localStorage.setItem(STORAGE, JSON.stringify({rows}));
+      localStorage.setItem(STORAGE,JSON.stringify({rows}));
     }
   </script>
 </body>
